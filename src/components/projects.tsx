@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github } from 'lucide-react';
+import { Github, Video } from 'lucide-react';
 
 interface Technology {
   icon: string;
@@ -13,6 +13,7 @@ interface Project {
   github?: string;
   githubUsername?: string;
   icon?: string;
+  video?: string;
 }
 
 interface ProjectCardProps {
@@ -51,24 +52,37 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => (
             />
           )}
           <h3 className="text-sm font-medium text-gray-900">{project.title}</h3>
-          {project.github && (
-            <a
-              href={project.github}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors group/link"
-            >
-              <Github className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline group-hover/link:underline">View Source</span>
-              {project.githubUsername && (
-                <img 
-                  src={`https://img.shields.io/github/commit-activity/t/${project.githubUsername}/${project.github.split('/').pop()}?style=flat-square&label=commits`}
-                  alt="GitHub commit count"
-                  className="h-4"
-                />
-              )}
-            </a>
-          )}
+          <div className="flex items-center gap-2">
+            {project.github && (
+              <a
+                href={project.github}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors group/link"
+              >
+                <Github className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline group-hover/link:underline">View Source</span>
+                {project.githubUsername && (
+                  <img 
+                    src={`https://img.shields.io/github/commit-activity/t/${project.githubUsername}/${project.github.split('/').pop()}?style=flat-square&label=commits`}
+                    alt="GitHub commit count"
+                    className="h-4"
+                  />
+                )}
+              </a>
+            )}
+            {project.video && (
+              <a
+                href={project.video}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors group/link"
+              >
+                <Video className="w-3.5 h-3.5" />
+                <span className="hidden sm:inline group-hover/link:underline">Watch Demo</span>
+              </a>
+            )}
+          </div>
         </div>
         <p className="text-xs text-gray-600 leading-relaxed pr-4">{project.description}</p>
       </div>
@@ -80,18 +94,15 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => (
 const ProjectsSection: React.FC = () => {
   const projects: Project[] = [
     {
-      title: "Markyt",
-      description: "E-commerce platform with advanced payment processing and real-time inventory management.",
-      github: "https://github.com/username/markyt",
-      githubUsername: "username",
-      technologies: [
-        { icon: 'svelte-plain', name: 'Svelte' },
-        { icon: 'firebase-plain', name: 'Firebase' },
-        { icon: 'typescript-plain', name: 'TypeScript' },
-        { icon: 'tailwindcss-plain', name: 'Tailwind' },
-        { icon: 'postgresql-plain', name: 'PostgreSQL' }
-      ]
-    },
+        title: "Brampton Tennis Queue",
+        description: "City of Brampton's recreation team to launch this Queuing app in local courts by Summer 2025!",
+        technologies: [
+          { icon: 'nextjs-plain', name: 'Next.js' },
+          { icon: 'typescript-plain', name: 'TypeScript' },
+          { icon: 'nodejs-plain', name: 'Node.js' },
+          { icon: 'tailwindcss-plain', name: 'Tailwind' }
+        ]
+      },
     {
       title: "Close to Home",
       description: "AI-powered disaster management platform with real-time heatmaps and interactive disaster zone mapping.",
@@ -106,8 +117,33 @@ const ProjectsSection: React.FC = () => {
       ]
     },
     {
+        title: "SpendSmart",
+        description: "CSC207 Project: AI powered finance management app for students, generating analytics on monthly spending",
+        github: "https://github.com/CSC207-NueralNova/group-project",
+        technologies: [
+          { icon: 'svelte-plain', name: 'Svelte' },
+          { icon: 'java-plain', name: 'Java' },
+          { icon: 'spring-plain', name: 'Spring Boot' },
+          { icon: 'tailwindcss-plain', name: 'Tailwind' }
+        ]
+      },
+      {
+        title: "Markyt",
+        description: "E-commerce platform with advanced payment processing and real-time inventory management.",
+        github: "https://github.com/lxyhan/markyt-development",
+        githubUsername: "lxyhan",
+        technologies: [
+          { icon: 'svelte-plain', name: 'Svelte' },
+          { icon: 'firebase-plain', name: 'Firebase' },
+          { icon: 'typescript-plain', name: 'TypeScript' },
+          { icon: 'tailwindcss-plain', name: 'Tailwind' },
+          { icon: 'postgresql-plain', name: 'PostgreSQL' }
+        ]
+      },
+    {
       title: "Harled Equipment Tracking",
       description: "Military equipment tracking system with intuitive UX and strict security standards.",
+      video: "https://example.com/harled-demo",
       technologies: [
         { icon: 'figma-plain', name: 'Figma' },
         { icon: 'react-original', name: 'React' },

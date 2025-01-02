@@ -47,7 +47,7 @@ const PersonalHeader = () => {
     { href: "https://github.com/lxyhan", icon: GitHubLogo, label: "GitHub", color: "text-[#181717] hover:text-black" },
     { href: "https://devpost.com/hanlyu2005", icon: DevpostLogo, label: "Devpost", color: "text-[#003E54] hover:text-[#002937]" },
     { href: "https://soundcloud.com/jamie-han-71919096", icon: SoundCloudLogo, label: "SoundCloud", color: "text-[#FF3300] hover:text-[#E62E00]" },
-    { href: "https://strava.com/athletes/yourid", icon: StravaLogo, label: "Strava", color: "text-[#FC4C02] hover:text-[#E34402]" }
+    { href: "https://www.strava.com/athletes/134055041?num_entries=10", icon: StravaLogo, label: "Strava", color: "text-[#FC4C02] hover:text-[#E34402]" }
   ];
 
   return (
@@ -58,12 +58,12 @@ const PersonalHeader = () => {
         <div className="absolute -left-4 top-0 w-1 h-1 bg-gray-200 rounded-full" />
         
         {/* Photo */}
-        <div className="w-28 h-28 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0 ring-1 ring-gray-100">
+        <div className="w-28 h-48 bg-gray-50 rounded-lg overflow-hidden flex-shrink-0 ring-1 ring-gray-100">
           <Image
             src="/profile-photo.jpg"
             alt="James Han"
             width={112}
-            height={112}
+            height={200}
             className="object-cover w-full h-full"
             quality={95}
           />
