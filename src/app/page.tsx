@@ -52,7 +52,7 @@ export default function Home() {
             
             <Profile />
             <Tech />
-            {/* <Blog /> */}
+            {/* <Blog //> */ }
           </div>
         </div>
 
