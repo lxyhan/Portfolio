@@ -60,7 +60,7 @@ const TechStackSection = () => {
       { icon: "firebase-plain", name: "Firebase" },
       { icon: "docker-plain", name: "Docker" },
       { icon: "kubernetes-plain", name: "Kubernetes" },
-      { icon: "webpack-plain", name: "webpack" },
+      { icon: "webpack-plain", name: "Webpack" },
       { icon: "mongodb-plain", name: "MongoDB" },
       { icon: "postgresql-plain", name: "PostgreSQL" },
       { icon: "redux-original", name: "Redux" },

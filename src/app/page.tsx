@@ -5,7 +5,6 @@ import Profile from '../components/profile';
 import Projects from '../components/projects';
 import Tech from '../components/tech';
 import Contributions from '../components/contributions';
-import Blog from '../components/blog';
 
 export default function Home() {
   return (
