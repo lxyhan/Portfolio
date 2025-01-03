@@ -98,6 +98,7 @@ const ProjectsSection: React.FC = () => {
         description: "City of Brampton's recreation team to launch this Queuing app in local courts by Summer 2025!",
         technologies: [
           { icon: 'nextjs-plain', name: 'Next.js' },
+          { icon: 'react-plain', name: 'React' },
           { icon: 'typescript-plain', name: 'TypeScript' },
           { icon: 'nodejs-plain', name: 'Node.js' },
           { icon: 'tailwindcss-plain', name: 'Tailwind' }
@@ -109,9 +110,9 @@ const ProjectsSection: React.FC = () => {
       github: "https://github.com/lxyhan/Close-to-Home",
       githubUsername: "lxyhan",
       technologies: [
-        { icon: 'react-original', name: 'React' },
+        { icon: 'svelte-plain', name: 'Svelte' },
         { icon: 'python-plain', name: 'Python' },
-        { icon: 'tensorflow-plain', name: 'TensorFlow' },
+        { icon: 'flask-plain', name: 'Flask' },
         { icon: 'mongodb-plain', name: 'MongoDB' },
         { icon: 'nextjs-plain', name: 'Next.js' }
       ]
@@ -122,6 +123,7 @@ const ProjectsSection: React.FC = () => {
         github: "https://github.com/CSC207-NueralNova/group-project",
         technologies: [
           { icon: 'svelte-plain', name: 'Svelte' },
+          { icon: 'firebase-plain', name: 'Firebase' },
           { icon: 'java-plain', name: 'Java' },
           { icon: 'spring-plain', name: 'Spring Boot' },
           { icon: 'tailwindcss-plain', name: 'Tailwind' }
@@ -135,7 +137,7 @@ const ProjectsSection: React.FC = () => {
         technologies: [
           { icon: 'svelte-plain', name: 'Svelte' },
           { icon: 'firebase-plain', name: 'Firebase' },
-          { icon: 'typescript-plain', name: 'TypeScript' },
+          { icon: 'javascript-plain', name: 'Javascript' },
           { icon: 'tailwindcss-plain', name: 'Tailwind' },
           { icon: 'postgresql-plain', name: 'PostgreSQL' }
         ]
@@ -147,7 +149,7 @@ const ProjectsSection: React.FC = () => {
       technologies: [
         { icon: 'figma-plain', name: 'Figma' },
         { icon: 'react-original', name: 'React' },
-        { icon: 'nodejs-plain', name: 'Node.js' },
+        { icon: 'django-plain', name: 'Django' },
         { icon: 'docker-plain', name: 'Docker' },
         { icon: 'kubernetes-plain', name: 'K8s' }
       ]
