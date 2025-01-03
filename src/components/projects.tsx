@@ -106,7 +106,7 @@ const ProjectsSection: React.FC = () => {
       },
     {
       title: "Close to Home",
-      description: "AI-powered disaster management platform with real-time heatmaps and interactive disaster zone mapping.",
+      description: "New Hacks Winning Project: heatmaps and interactive disaster zone mapping.",
       github: "https://github.com/lxyhan/Close-to-Home",
       githubUsername: "lxyhan",
       technologies: [
