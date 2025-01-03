@@ -5,6 +5,7 @@ import Profile from '../components/profile';
 import Projects from '../components/projects';
 import Tech from '../components/tech';
 import Contributions from '../components/contributions';
+import Blog from '../components/blog';
 
 export default function Home() {
   return (
@@ -42,7 +43,7 @@ export default function Home() {
     {/* Subtle background gradient decoration */}
     <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-96 bg-gradient-to-r from-gray-50 via-white to-gray-50 blur-3xl opacity-80 pointer-events-none" />
     
-    <div className="flex justify-center">
+    <div className="flex flex-col items-center">
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 xl:gap-24 py-12 xl:py-16 w-full max-w-[1264px] relative">
         {/* Left column */}
         <div className="relative w-full max-w-[620px] mx-auto xl:mx-0">
@@ -52,7 +53,9 @@ export default function Home() {
             
             <Profile />
             <Tech />
-            {/* <Blog //> */ }
+            <div className="hidden xl:block">
+              <Blog />
+            </div>
           </div>
         </div>
 
@@ -73,6 +76,11 @@ export default function Home() {
         {/* Decorative corner elements */}
         <div className="absolute top-0 left-0 w-24 h-24 bg-gradient-to-br from-gray-50 to-transparent opacity-60 pointer-events-none" />
         <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-gray-50 to-transparent opacity-60 pointer-events-none" />
+      </div>
+
+      {/* Mobile Essays section */}
+      <div className="xl:hidden w-full max-w-[620px] space-y-6 animate-in">
+        <Blog />
       </div>
     </div>
   </div>
