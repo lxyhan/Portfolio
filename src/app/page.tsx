@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Profile from '../components/profile';
 import Projects from '../components/projects';
 import Tech from '../components/tech';
@@ -103,126 +103,129 @@ const MobileBlogOverlay = ({ post, onClose }: { post: BlogPost; onClose: () => v
   );
 };
 
+
 export default function Home() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
 
-  // Effect to handle URL changes
   useEffect(() => {
-    const postTitle = searchParams.get('post');
-    if (postTitle) {
-      // Find the post that matches the URL
-      const post = posts.find(p => slugify(p.title) === postTitle);
-      if (post) {
-        setSelectedPost(post);
+    const handleSearchParams = () => {
+      // Dynamically unwrap searchParams
+      const postTitle = searchParams.get('post');
+      if (postTitle) {
+        const post = posts.find((p) => slugify(p.title) === postTitle);
+        if (post) {
+          setSelectedPost(post);
+        } else {
+          setSelectedPost(null);
+        }
+      } else {
+        setSelectedPost(null);
       }
-    } else {
-      setSelectedPost(null);
-    }
+    };
+
+    handleSearchParams();
   }, [searchParams]);
 
-  // Function to handle post selection
   const handlePostSelect = (post: BlogPost) => {
     setSelectedPost(post);
-    // Update URL with the post title
     router.push(`/?post=${slugify(post.title)}`, { scroll: false });
   };
 
-  // Function to handle post closing
   const handlePostClose = () => {
     setSelectedPost(null);
-    // Remove post from URL
     router.push('/', { scroll: false });
   };
 
   return (
-<main className="min-h-screen bg-white selection:bg-gray-100">
-  <style jsx global>{`
-    @keyframes fadeIn {
-      from {
-        opacity: 0;
-        transform: translateY(10px);
-      }
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
+    <Suspense fallback={<div>Loading...</div>}>
+      <main className="min-h-screen bg-white selection:bg-gray-100">
+        <style jsx global>{`
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+              transform: translateY(10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
+          }
 
-    ::-webkit-scrollbar {
-      width: 6px; /* Subtle scrollbar width */
-    }
+          ::-webkit-scrollbar {
+            width: 6px; /* Subtle scrollbar width */
+          }
 
-    ::-webkit-scrollbar-track {
-      background: transparent; /* Transparent scrollbar track */
-    }
+          ::-webkit-scrollbar-track {
+            background: transparent; /* Transparent scrollbar track */
+          }
 
-    ::-webkit-scrollbar-thumb {
-      background: rgba(0, 0, 0, 0.2); /* Subtle scrollbar color */
-      border-radius: 3px; /* Rounded scrollbar thumb */
-    }
+          ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2); /* Subtle scrollbar color */
+            border-radius: 3px; /* Rounded scrollbar thumb */
+          }
 
-    ::-webkit-scrollbar-thumb:hover {
-      background: rgba(0, 0, 0, 0.3); /* Slightly darker scrollbar on hover */
-    }
+          ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.3); /* Slightly darker scrollbar on hover */
+          }
 
-    * {
-      scrollbar-width: thin; /* Subtle scrollbar for Firefox */
-      scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-    }
+          * {
+            scrollbar-width: thin; /* Subtle scrollbar for Firefox */
+            scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+          }
 
-    .animate-in {
-      animation: fadeIn 0.5s ease-out forwards;
-    }
-  `}</style>
+          .animate-in {
+            animation: fadeIn 0.5s ease-out forwards;
+          }
+        `}</style>
 
-  <div className="flex flex-col items-center">
-    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 xl:gap-12 py-6 xl:py-16 px-4 sm:px-6 w-full max-w-[1264px]">
-      {/* Left column */}
-      <div className="relative w-full max-w-[920px] mx-auto xl:mx-0 space-y-6">
-        <Profile />
-        <Tech />
-        <div className="hidden xl:block">
-          <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
-        </div>
-      </div>
+        <div className="flex flex-col items-center">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 xl:gap-12 py-6 xl:py-16 px-4 sm:px-6 w-full max-w-[1264px]">
+            {/* Left column */}
+            <div className="relative w-full max-w-[920px] mx-auto xl:mx-0 space-y-6">
+              <Profile />
+              <Tech />
+              <div className="hidden xl:block">
+                <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
+              </div>
+            </div>
 
-      {/* Right column */}
-      <div className="relative w-full mx-auto xl:mx-0">
-        {selectedPost ? (
-          <div
-            className="w-full space-y-6"
-            style={{
-              maxHeight: 'calc(100vh - 4rem)', // Limit height to viewport height minus some margin
-              overflowY: 'auto', // Enable scrolling only for blog content
-            }}
-          >
-            <BlogContent post={selectedPost} onClose={handlePostClose} />
+            {/* Right column */}
+            <div className="relative w-full mx-auto xl:mx-0">
+              {selectedPost ? (
+                <div
+                  className="w-full space-y-6"
+                  style={{
+                    maxHeight: 'calc(100vh - 4rem)', // Limit height to viewport height minus some margin
+                    overflowY: 'auto', // Enable scrolling only for blog content
+                  }}
+                >
+                  <BlogContent post={selectedPost} onClose={handlePostClose} />
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <Projects />
+                  <Contributions />
+                </div>
+              )}
+            </div>
           </div>
-        ) : (
-          <div className="space-y-6">
-            <Projects />
-            <Contributions />
+
+          {/* Mobile Essays section */}
+          <div className="xl:hidden w-full max-w-[620px] space-y-6 px-4">
+            <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
+          </div>
+        </div>
+
+        {/* Mobile blog content overlay */}
+        {selectedPost && (
+          <div className="xl:hidden">
+            <MobileBlogOverlay post={selectedPost} onClose={handlePostClose} />
           </div>
         )}
-      </div>
-    </div>
-
-    {/* Mobile Essays section */}
-    <div className="xl:hidden w-full max-w-[620px] space-y-6 px-4">
-      <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
-    </div>
-  </div>
-
-  {/* Mobile blog content overlay */}
-  {selectedPost && (
-    <div className="xl:hidden">
-      <MobileBlogOverlay post={selectedPost} onClose={handlePostClose} />
-    </div>
-  )}
-</main>
-
+      </main>
+</Suspense>
 
 
   );
