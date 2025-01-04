@@ -1,89 +1,229 @@
 'use client';
 
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Profile from '../components/profile';
 import Projects from '../components/projects';
 import Tech from '../components/tech';
 import Contributions from '../components/contributions';
 import Blog from '../components/blog';
+import type { BlogPost } from '@/types/blog';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { slugify } from '@/utils/slug';
+
+const posts: BlogPost[] = [
+  {
+    title: "On Distance Running: Reflections from the UofT Track",
+    description: "An examination of endurance athletics through the lens of university running culture, exploring the intersection of physical capability and mental fortitude.",
+    date: "2024-01-15",
+    image: "/Running.JPG",
+    contentPath: "/blog-posts/running-revolution.html"
+  },
+  {
+    title: "A Technical Analysis of Close to Home: NewHacks 2024",
+    description: "A methodological breakdown of our winning hackathon submission, examining the architectural decisions and technical challenges in developing a disaster response system.",
+    date: "2024-01-02",
+    image: "/Newhacks.png",
+    contentPath: "/blog-posts/surviving-newhacks.html"
+  }
+];
+
+
+const BlogContent = ({ post, onClose }: { post: BlogPost; onClose: () => void }) => {
+  const [content, setContent] = useState('');
+
+  React.useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const response = await fetch(post.contentPath);
+        const html = await response.text();
+        setContent(html);
+      } catch (error) {
+        console.error('Error loading blog post:', error);
+        setContent('<p>Failed to load blog post content.</p>');
+      }
+    };
+
+    fetchContent();
+  }, [post.contentPath]);
+
+  return (
+    <div className="w-full">
+      <div className="relative">
+        <div className="flex justify-end mb-4">
+          <button
+            onClick={onClose}
+            className="flex items-center gap-1 px-3 py-1 text-sm text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-md shadow-sm transition-all"
+            aria-label="Close blog post"
+          >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M10 19l-7-7m0 0l7-7m-7 7h18"
+            />
+          </svg>
+            <span>Back to Featured Projects</span>
+          </button>
+        </div>
+  
+        <div className="w-full h-40 mb-6 overflow-hidden rounded-lg bg-gray-50">
+          <img
+            src={post.image}
+            alt={`Cover image for the blog post`}
+            className="w-full h-full object-cover"
+          />
+        </div>
+  
+        <article
+          className="prose prose-sm prose-gray max-w-none prose-headings:font-medium prose-headings:text-gray-900 prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-gray-900 prose-a:no-underline hover:prose-a:underline"
+          dangerouslySetInnerHTML={{ __html: content }}
+        />
+      </div>
+    </div>
+  );
+  
+  
+};
+
+// Mobile blog content overlay
+const MobileBlogOverlay = ({ post, onClose }: { post: BlogPost; onClose: () => void }) => {
+  return (
+    <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
+      <div className="max-w-lg mx-auto px-4 py-8">
+        <BlogContent post={post} onClose={onClose} />
+      </div>
+    </div>
+  );
+};
 
 export default function Home() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+
+  // Effect to handle URL changes
+  useEffect(() => {
+    const postTitle = searchParams.get('post');
+    if (postTitle) {
+      // Find the post that matches the URL
+      const post = posts.find(p => slugify(p.title) === postTitle);
+      if (post) {
+        setSelectedPost(post);
+      }
+    } else {
+      setSelectedPost(null);
+    }
+  }, [searchParams]);
+
+  // Function to handle post selection
+  const handlePostSelect = (post: BlogPost) => {
+    setSelectedPost(post);
+    // Update URL with the post title
+    router.push(`/?post=${slugify(post.title)}`, { scroll: false });
+  };
+
+  // Function to handle post closing
+  const handlePostClose = () => {
+    setSelectedPost(null);
+    // Remove post from URL
+    router.push('/', { scroll: false });
+  };
+
   return (
-    <main className="min-h-screen bg-white selection:bg-gray-100">
-      <style jsx global>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-        
-        ::-webkit-scrollbar {
-          width: 2px;
-        }
-        ::-webkit-scrollbar-track {
-          background: transparent;
-        }
-        ::-webkit-scrollbar-thumb {
-          background: #E5E7EB;
-          border-radius: 2px;
-        }
-        ::-webkit-scrollbar-thumb:hover {
-          background: #D1D5DB;
-        }
-        * {
-          scrollbar-width: thin;
-          scrollbar-color: #E5E7EB transparent;
-        }
-        
-        .animate-in {
-          animation: fadeIn 0.5s ease-out forwards;
-        }
-      `}</style>
+<main className="min-h-screen bg-white selection:bg-gray-100">
+  <style jsx global>{`
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
 
-<div className="relative max-w-8xl mx-auto px-4 sm:px-6 lg:px-8">
-    {/* Subtle background gradient decoration */}
-    <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-lg h-96 bg-gradient-to-r from-gray-50 via-white to-gray-50 blur-3xl opacity-80 pointer-events-none" />
-    
-    <div className="flex flex-col items-center">
-      <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 xl:gap-24 py-12 xl:py-16 w-full max-w-[1264px] relative">
-        {/* Left column */}
-        <div className="relative w-full max-w-[620px] mx-auto xl:mx-0">
-          <div className="xl:sticky xl:top-8 space-y-6 animate-in" style={{ animationDelay: '0.1s' }}>
-            {/* Subtle section indicator */}
-            <div className="absolute -left-4 top-0 h-full w-px bg-gradient-to-b from-transparent via-gray-200 to-transparent opacity-0 xl:opacity-30" />
-            
-            <Profile />
-            <Tech />
-            <div className="hidden xl:block">
-              <Blog />
-            </div>
-          </div>
+    ::-webkit-scrollbar {
+      width: 6px; /* Subtle scrollbar width */
+    }
+
+    ::-webkit-scrollbar-track {
+      background: transparent; /* Transparent scrollbar track */
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2); /* Subtle scrollbar color */
+      border-radius: 3px; /* Rounded scrollbar thumb */
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.3); /* Slightly darker scrollbar on hover */
+    }
+
+    * {
+      scrollbar-width: thin; /* Subtle scrollbar for Firefox */
+      scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+    }
+
+    .animate-in {
+      animation: fadeIn 0.5s ease-out forwards;
+    }
+  `}</style>
+
+  <div className="flex flex-col items-center">
+    <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 xl:gap-12 py-6 xl:py-16 px-4 sm:px-6 w-full max-w-[1264px]">
+      {/* Left column */}
+      <div className="relative w-full max-w-[920px] mx-auto xl:mx-0 space-y-6">
+        <Profile />
+        <Tech />
+        <div className="hidden xl:block">
+          <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
         </div>
+      </div>
 
-        {/* Center divider */}
-        <div className="hidden xl:block absolute left-1/2 top-12 -translate-x-1/2 w-px h-[calc(100%-6rem)] bg-gradient-to-b from-transparent via-gray-200 to-transparent opacity-30" />
-
-        {/* Right column */}
-        <div className="relative w-full max-w-[520px] mx-auto xl:mx-0">
-          <div className="space-y-6 animate-in" style={{ animationDelay: '0.2s' }}>
-            {/* Subtle section indicator */}
-            <div className="absolute -left-4 top-0 h-full w-px bg-gradient-to-b from-transparent via-gray-200 to-transparent opacity-0 xl:opacity-30" />
-            
+      {/* Right column */}
+      <div className="relative w-full mx-auto xl:mx-0">
+        {selectedPost ? (
+          <div
+            className="w-full space-y-6"
+            style={{
+              maxHeight: 'calc(100vh - 4rem)', // Limit height to viewport height minus some margin
+              overflowY: 'auto', // Enable scrolling only for blog content
+            }}
+          >
+            <BlogContent post={selectedPost} onClose={handlePostClose} />
+          </div>
+        ) : (
+          <div className="space-y-6">
             <Projects />
             <Contributions />
           </div>
-        </div>
-
-        {/* Decorative corner elements */}
-        <div className="absolute top-0 left-0 w-24 h-24 bg-gradient-to-br from-gray-50 to-transparent opacity-60 pointer-events-none" />
-        <div className="absolute top-0 right-0 w-24 h-24 bg-gradient-to-bl from-gray-50 to-transparent opacity-60 pointer-events-none" />
-      </div>
-
-      {/* Mobile Essays section */}
-      <div className="xl:hidden w-full max-w-[620px] space-y-6 animate-in">
-        <Blog />
+        )}
       </div>
     </div>
+
+    {/* Mobile Essays section */}
+    <div className="xl:hidden w-full max-w-[620px] space-y-6 px-4">
+      <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
+    </div>
   </div>
+
+  {/* Mobile blog content overlay */}
+  {selectedPost && (
+    <div className="xl:hidden">
+      <MobileBlogOverlay post={selectedPost} onClose={handlePostClose} />
+    </div>
+  )}
 </main>
+
+
+
   );
 }

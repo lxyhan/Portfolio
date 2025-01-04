@@ -1,24 +1,35 @@
 import React from 'react';
 import { Calendar, ArrowUpRight } from 'lucide-react';
+import type { BlogPost } from '@/types/blog';
+import type { Dispatch, SetStateAction } from 'react';
 
-interface BlogPost {
-  title: string;
-  description: string;
-  date: string;
-  image: string;
-  notionLink: string;
+interface BlogSectionProps {
+  selectedPost: BlogPost | null;
+  onPostClick: (post: BlogPost) => void;
 }
 
 interface BlogCardProps {
   post: BlogPost;
+  onClick: () => void;
 }
 
-const BlogCard: React.FC<BlogCardProps> = ({ post }) => (
-  <div className="group relative flex gap-4 py-3 border-b border-gray-100 last:border-b-0">
+const BlogCard = ({ post, onClick }: BlogCardProps) => (
+  <div 
+    onClick={onClick}
+    className="group relative flex gap-4 py-3 border-b border-gray-100 last:border-b-0 cursor-pointer hover:bg-gray-50 transition-colors"
+    role="button"
+    tabIndex={0}
+    onKeyDown={(e: React.KeyboardEvent) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        onClick();
+      }
+    }}
+  >
     <div className="relative w-24 h-24 overflow-hidden rounded-md flex-shrink-0">
       <img
         src={post.image}
-        alt={post.title}
+        alt={`Cover image for ${post.title}`}
         className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
       />
     </div>
@@ -26,7 +37,13 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => (
       <div>
         <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
           <Calendar className="w-3 h-3" />
-          <time dateTime={post.date}>{post.date}</time>
+          <time dateTime={post.date}>
+            {new Date(post.date).toLocaleDateString('en-US', {
+              year: 'numeric',
+              month: 'long',
+              day: 'numeric'
+            })}
+          </time>
         </div>
         <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-1">
           {post.title}
@@ -36,35 +53,30 @@ const BlogCard: React.FC<BlogCardProps> = ({ post }) => (
         </p>
       </div>
       <div className="mt-1">
-        <a
-          href={post.notionLink}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="inline-flex items-center gap-1 text-xs text-gray-900 hover:text-gray-600 transition-colors"
-        >
-          Read on Notion
+        <span className="inline-flex items-center gap-1 text-xs text-gray-900 group-hover:text-gray-600 transition-colors">
+          Read post
           <ArrowUpRight className="w-3 h-3" />
-        </a>
+        </span>
       </div>
     </div>
   </div>
 );
 
-const BlogSection: React.FC = () => {
+const Blog = ({ selectedPost, onPostClick }: BlogSectionProps) => {
   const posts: BlogPost[] = [
     {
-      title: "On Distance Running: Reflections from the UofT Track",
-      description: "An examination of endurance athletics through the lens of university running culture, exploring the intersection of physical capability and mental fortitude.",
-      date: "2024-01-15",
+      title: "On Distance Running: Reflections from the UofT Run Club",
+      description: "4 Months ago I started organizing runs for the UofT Run Club, Here's the story.",
+      date: "2024-09-01",
       image: "/Running.JPG",
-      notionLink: "https://notion.so/uoft-run-club"
+      contentPath: "/blog-posts/running-revolution.html"
     },
     {
-      title: "A Technical Analysis of Close to Home: NewHacks 2024",
-      description: "A methodological breakdown of our winning hackathon submission, examining the architectural decisions and technical challenges in developing a disaster response system.",
-      date: "2024-01-02",
+      title: "Surviving (and Winning!) my first University Hackathon",
+      description: "24 hours of pure chaos and creativity: no registration, an impromptu team that clicked instantly, and a git reset that wiped my laptop keychain clean five minutes in.",
+      date: "2024-10-28",
       image: "/Newhacks.png",
-      notionLink: "https://notion.so/newhacks-reflection"
+      contentPath: "/blog-posts/surviving-newhacks.html"
     }
   ];
 
@@ -72,7 +84,7 @@ const BlogSection: React.FC = () => {
     <section className="max-w-3xl mx-auto order-last xl:order-none">
       <div className="mb-4">
         <h2 className="text-lg font-medium text-gray-900 mb-1">
-          Essays I wrote while procrastinating...
+          Essays
         </h2>
         <p className="text-sm text-gray-600">
           Selected writings on software design, athletics, and university life.
@@ -80,11 +92,15 @@ const BlogSection: React.FC = () => {
       </div>
       <div className="divide-y divide-gray-100">
         {posts.map((post, i) => (
-          <BlogCard key={i} post={post} />
+          <BlogCard 
+            key={i} 
+            post={post} 
+            onClick={() => onPostClick(post)}
+          />
         ))}
       </div>
     </section>
   );
 };
 
-export default BlogSection;
+export default Blog;
