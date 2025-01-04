@@ -83,7 +83,7 @@ const Blog = ({ onPostClick }: BlogSectionProps) => {
     <section className="max-w-3xl mx-auto order-last xl:order-none">
       <div className="mb-4">
         <h2 className="text-lg font-medium text-gray-900 mb-1">
-          Essays
+          Blog
         </h2>
         <p className="text-sm text-gray-600">
           Selected writings on software design, athletics, and university life.
