@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect, Suspense } from 'react';
+import React, { useState, useEffect } from 'react';
 import Profile from '../components/profile';
 import Projects from '../components/projects';
 import Tech from '../components/tech';
@@ -16,22 +16,46 @@ const posts: BlogPost[] = [
     description: "An examination of endurance athletics through the lens of university running culture, exploring the intersection of physical capability and mental fortitude.",
     date: "2024-01-15",
     image: "/Running.JPG",
-    contentPath: "/blog-posts/running-revolution.html"
+    contentPath: "/blog-posts/running-revolution.html",
   },
   {
     title: "A Technical Analysis of Close to Home: NewHacks 2024",
     description: "A methodological breakdown of our winning hackathon submission, examining the architectural decisions and technical challenges in developing a disaster response system.",
     date: "2024-01-02",
     image: "/Newhacks.png",
-    contentPath: "/blog-posts/surviving-newhacks.html"
-  }
+    contentPath: "/blog-posts/surviving-newhacks.html",
+  },
 ];
 
+// Component to handle `useSearchParams`
+const BlogContainer = ({
+  selectedPost,
+  setSelectedPost,
+}: {
+  selectedPost: BlogPost | null;
+  setSelectedPost: (post: BlogPost | null) => void;
+}) => {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const postTitle = searchParams.get('post');
+    if (!selectedPost || slugify(selectedPost.title) !== postTitle) {
+      if (postTitle) {
+        const post = posts.find((p) => slugify(p.title) === postTitle);
+        setSelectedPost(post || null);
+      } else {
+        setSelectedPost(null);
+      }
+    }
+  }, [searchParams, selectedPost, setSelectedPost]);
+
+  return null; // This component doesn't render anything visible
+};
 
 const BlogContent = ({ post, onClose }: { post: BlogPost; onClose: () => void }) => {
   const [content, setContent] = useState('');
 
-  React.useEffect(() => {
+  useEffect(() => {
     const fetchContent = async () => {
       try {
         const response = await fetch(post.contentPath);
@@ -55,24 +79,24 @@ const BlogContent = ({ post, onClose }: { post: BlogPost; onClose: () => void })
             className="flex items-center gap-1 px-3 py-1 text-sm text-gray-500 bg-gray-100 hover:bg-gray-200 rounded-md shadow-sm transition-all"
             aria-label="Close blog post"
           >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            className="w-5 h-5"
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            strokeWidth={2}
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M10 19l-7-7m0 0l7-7m-7 7h18"
-            />
-          </svg>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="w-5 h-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth={2}
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M10 19l-7-7m0 0l7-7m-7 7h18"
+              />
+            </svg>
             <span>Back to Featured Projects</span>
           </button>
         </div>
-  
+
         <div className="w-full h-40 mb-6 overflow-hidden rounded-lg bg-gray-50">
           <img
             src={post.image}
@@ -80,7 +104,7 @@ const BlogContent = ({ post, onClose }: { post: BlogPost; onClose: () => void })
             className="w-full h-full object-cover"
           />
         </div>
-  
+
         <article
           className="prose prose-sm prose-gray max-w-none prose-headings:font-medium prose-headings:text-gray-900 prose-p:text-gray-600 prose-p:leading-relaxed prose-a:text-gray-900 prose-a:no-underline hover:prose-a:underline"
           dangerouslySetInnerHTML={{ __html: content }}
@@ -88,11 +112,8 @@ const BlogContent = ({ post, onClose }: { post: BlogPost; onClose: () => void })
       </div>
     </div>
   );
-  
-  
 };
 
-// Mobile blog content overlay
 const MobileBlogOverlay = ({ post, onClose }: { post: BlogPost; onClose: () => void }) => {
   return (
     <div className="fixed inset-0 bg-white z-50 overflow-y-auto">
@@ -103,34 +124,13 @@ const MobileBlogOverlay = ({ post, onClose }: { post: BlogPost; onClose: () => v
   );
 };
 
-
 export default function Home() {
   const router = useRouter();
-  const searchParams = useSearchParams();
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
 
-  useEffect(() => {
-    const handleSearchParams = () => {
-      // Dynamically unwrap searchParams
-      const postTitle = searchParams.get('post');
-      if (postTitle) {
-        const post = posts.find((p) => slugify(p.title) === postTitle);
-        if (post) {
-          setSelectedPost(post);
-        } else {
-          setSelectedPost(null);
-        }
-      } else {
-        setSelectedPost(null);
-      }
-    };
-
-    handleSearchParams();
-  }, [searchParams]);
-
   const handlePostSelect = (post: BlogPost) => {
-    setSelectedPost(post);
     router.push(`/?post=${slugify(post.title)}`, { scroll: false });
+    setSelectedPost(post);
   };
 
   const handlePostClose = () => {
@@ -139,94 +139,88 @@ export default function Home() {
   };
 
   return (
-    <Suspense fallback={<div>Loading...</div>}>
-      <main className="min-h-screen bg-white selection:bg-gray-100">
-        <style jsx global>{`
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(10px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
+    <main className="min-h-screen bg-white selection:bg-gray-100">
+      <style jsx global>{`
+        @keyframes fadeIn {
+          from {
+            opacity: 0;
+            transform: translateY(10px);
           }
-
-          ::-webkit-scrollbar {
-            width: 6px; /* Subtle scrollbar width */
+          to {
+            opacity: 1;
+            transform: translateY(0);
           }
+        }
 
-          ::-webkit-scrollbar-track {
-            background: transparent; /* Transparent scrollbar track */
-          }
+        ::-webkit-scrollbar {
+          width: 6px;
+        }
 
-          ::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.2); /* Subtle scrollbar color */
-            border-radius: 3px; /* Rounded scrollbar thumb */
-          }
+        ::-webkit-scrollbar-track {
+          background: transparent;
+        }
 
-          ::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 0, 0, 0.3); /* Slightly darker scrollbar on hover */
-          }
+        ::-webkit-scrollbar-thumb {
+          background: rgba(0, 0, 0, 0.2);
+          border-radius: 3px;
+        }
 
-          * {
-            scrollbar-width: thin; /* Subtle scrollbar for Firefox */
-            scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-          }
+        ::-webkit-scrollbar-thumb:hover {
+          background: rgba(0, 0, 0, 0.3);
+        }
 
-          .animate-in {
-            animation: fadeIn 0.5s ease-out forwards;
-          }
-        `}</style>
+        * {
+          scrollbar-width: thin;
+          scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+        }
 
-        <div className="flex flex-col items-center">
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 xl:gap-12 py-6 xl:py-16 px-4 sm:px-6 w-full max-w-[1264px]">
-            {/* Left column */}
-            <div className="relative w-full max-w-[920px] mx-auto xl:mx-0 space-y-6">
-              <Profile />
-              <Tech />
-              <div className="hidden xl:block">
-                <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
-              </div>
-            </div>
+        .animate-in {
+          animation: fadeIn 0.5s ease-out forwards;
+        }
+      `}</style>
 
-            {/* Right column */}
-            <div className="relative w-full mx-auto xl:mx-0">
-              {selectedPost ? (
-                <div
-                  className="w-full space-y-6"
-                  style={{
-                    maxHeight: 'calc(100vh - 4rem)', // Limit height to viewport height minus some margin
-                    overflowY: 'auto', // Enable scrolling only for blog content
-                  }}
-                >
-                  <BlogContent post={selectedPost} onClose={handlePostClose} />
-                </div>
-              ) : (
-                <div className="space-y-6">
-                  <Projects />
-                  <Contributions />
-                </div>
-              )}
+      <BlogContainer selectedPost={selectedPost} setSelectedPost={setSelectedPost} />
+
+      <div className="flex flex-col items-center">
+        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 xl:gap-12 py-6 xl:py-16 px-4 sm:px-6 w-full max-w-[1264px]">
+          <div className="relative w-full max-w-[920px] mx-auto xl:mx-0 space-y-6">
+            <Profile />
+            <Tech />
+            <div className="hidden xl:block">
+              <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
             </div>
           </div>
 
-          {/* Mobile Essays section */}
-          <div className="xl:hidden w-full max-w-[620px] space-y-6 px-4">
-            <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
+          <div className="relative w-full mx-auto xl:mx-0">
+            {selectedPost ? (
+              <div
+                className="w-full space-y-6"
+                style={{
+                  maxHeight: 'calc(100vh - 4rem)',
+                  overflowY: 'auto',
+                }}
+              >
+                <BlogContent post={selectedPost} onClose={handlePostClose} />
+              </div>
+            ) : (
+              <div className="space-y-6">
+                <Projects />
+                <Contributions />
+              </div>
+            )}
           </div>
         </div>
 
-        {/* Mobile blog content overlay */}
-        {selectedPost && (
-          <div className="xl:hidden">
-            <MobileBlogOverlay post={selectedPost} onClose={handlePostClose} />
-          </div>
-        )}
-      </main>
-</Suspense>
+        <div className="xl:hidden w-full max-w-[620px] space-y-6 px-4">
+          <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
+        </div>
+      </div>
 
-
+      {selectedPost && (
+        <div className="xl:hidden">
+          <MobileBlogOverlay post={selectedPost} onClose={handlePostClose} />
+        </div>
+      )}
+    </main>
   );
 }
