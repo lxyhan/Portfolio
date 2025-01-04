@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import Profile from '../components/profile';
 import Projects from '../components/projects';
 import Tech from '../components/tech';
@@ -27,30 +27,6 @@ const posts: BlogPost[] = [
   },
 ];
 
-// Component to handle `useSearchParams`
-const BlogContainer = ({
-  selectedPost,
-  setSelectedPost,
-}: {
-  selectedPost: BlogPost | null;
-  setSelectedPost: (post: BlogPost | null) => void;
-}) => {
-  const searchParams = useSearchParams();
-
-  useEffect(() => {
-    const postTitle = searchParams.get('post');
-    if (!selectedPost || slugify(selectedPost.title) !== postTitle) {
-      if (postTitle) {
-        const post = posts.find((p) => slugify(p.title) === postTitle);
-        setSelectedPost(post || null);
-      } else {
-        setSelectedPost(null);
-      }
-    }
-  }, [searchParams, selectedPost, setSelectedPost]);
-
-  return null; // This component doesn't render anything visible
-};
 
 const BlogContent = ({ post, onClose }: { post: BlogPost; onClose: () => void }) => {
   const [content, setContent] = useState('');
@@ -139,88 +115,88 @@ export default function Home() {
   };
 
   return (
-    <main className="min-h-screen bg-white selection:bg-gray-100">
-      <style jsx global>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
+    <Suspense fallback={<div>Loading...</div>}>
+      <main className="min-h-screen bg-white selection:bg-gray-100">
+        <style jsx global>{`
+          @keyframes fadeIn {
+            from {
+              opacity: 0;
+              transform: translateY(10px);
+            }
+            to {
+              opacity: 1;
+              transform: translateY(0);
+            }
           }
-          to {
-            opacity: 1;
-            transform: translateY(0);
+
+          ::-webkit-scrollbar {
+            width: 6px;
           }
-        }
 
-        ::-webkit-scrollbar {
-          width: 6px;
-        }
+          ::-webkit-scrollbar-track {
+            background: transparent;
+          }
 
-        ::-webkit-scrollbar-track {
-          background: transparent;
-        }
+          ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+          }
 
-        ::-webkit-scrollbar-thumb {
-          background: rgba(0, 0, 0, 0.2);
-          border-radius: 3px;
-        }
+          ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.3);
+          }
 
-        ::-webkit-scrollbar-thumb:hover {
-          background: rgba(0, 0, 0, 0.3);
-        }
+          * {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
+          }
 
-        * {
-          scrollbar-width: thin;
-          scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-        }
+          .animate-in {
+            animation: fadeIn 0.5s ease-out forwards;
+          }
+        `}</style>
 
-        .animate-in {
-          animation: fadeIn 0.5s ease-out forwards;
-        }
-      `}</style>
+        <div className="flex flex-col items-center">
+          <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 xl:gap-12 py-6 xl:py-16 px-4 sm:px-6 w-full max-w-[1264px]">
+            <div className="relative w-full max-w-[920px] mx-auto xl:mx-0 space-y-6">
+              <Profile />
+              <Tech />
+              <div className="hidden xl:block">
+                <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
+              </div>
+            </div>
 
-      <BlogContainer selectedPost={selectedPost} setSelectedPost={setSelectedPost} />
-
-      <div className="flex flex-col items-center">
-        <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 xl:gap-12 py-6 xl:py-16 px-4 sm:px-6 w-full max-w-[1264px]">
-          <div className="relative w-full max-w-[920px] mx-auto xl:mx-0 space-y-6">
-            <Profile />
-            <Tech />
-            <div className="hidden xl:block">
-              <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
+            <div className="relative w-full mx-auto xl:mx-0">
+              {selectedPost ? (
+                <div
+                  className="w-full space-y-6"
+                  style={{
+                    maxHeight: 'calc(100vh - 4rem)',
+                    overflowY: 'auto',
+                  }}
+                >
+                  <BlogContent post={selectedPost} onClose={handlePostClose} />
+                </div>
+              ) : (
+                <div className="space-y-6">
+                  <Projects />
+                  <Contributions />
+                </div>
+              )}
             </div>
           </div>
 
-          <div className="relative w-full mx-auto xl:mx-0">
-            {selectedPost ? (
-              <div
-                className="w-full space-y-6"
-                style={{
-                  maxHeight: 'calc(100vh - 4rem)',
-                  overflowY: 'auto',
-                }}
-              >
-                <BlogContent post={selectedPost} onClose={handlePostClose} />
-              </div>
-            ) : (
-              <div className="space-y-6">
-                <Projects />
-                <Contributions />
-              </div>
-            )}
+          <div className="xl:hidden w-full max-w-[620px] space-y-6 px-4">
+            <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
           </div>
         </div>
 
-        <div className="xl:hidden w-full max-w-[620px] space-y-6 px-4">
-          <Blog selectedPost={selectedPost} onPostClick={handlePostSelect} />
-        </div>
-      </div>
-
-      {selectedPost && (
-        <div className="xl:hidden">
-          <MobileBlogOverlay post={selectedPost} onClose={handlePostClose} />
-        </div>
-      )}
-    </main>
+        {selectedPost && (
+          <div className="xl:hidden">
+            <MobileBlogOverlay post={selectedPost} onClose={handlePostClose} />
+          </div>
+        )}
+      </main>
+    </Suspense>
   );
 }
