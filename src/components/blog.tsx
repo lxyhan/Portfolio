@@ -1,7 +1,6 @@
 import React from 'react';
 import { Calendar, ArrowUpRight } from 'lucide-react';
 import type { BlogPost } from '@/types/blog';
-import type { Dispatch, SetStateAction } from 'react';
 
 interface BlogSectionProps {
   selectedPost: BlogPost | null;
@@ -62,7 +61,7 @@ const BlogCard = ({ post, onClick }: BlogCardProps) => (
   </div>
 );
 
-const Blog = ({ selectedPost, onPostClick }: BlogSectionProps) => {
+const Blog = ({ onPostClick }: BlogSectionProps) => {
   const posts: BlogPost[] = [
     {
       title: "On Distance Running: Reflections from the UofT Run Club",
