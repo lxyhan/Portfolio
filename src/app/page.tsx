@@ -10,23 +10,6 @@ import type { BlogPost } from '@/types/blog';
 import { useRouter } from 'next/navigation';
 import { slugify } from '@/utils/slug';
 
-const posts: BlogPost[] = [
-  {
-    title: "On Distance Running: Reflections from the UofT Track",
-    description: "An examination of endurance athletics through the lens of university running culture, exploring the intersection of physical capability and mental fortitude.",
-    date: "2024-01-15",
-    image: "/Running.JPG",
-    contentPath: "/blog-posts/running-revolution.html",
-  },
-  {
-    title: "A Technical Analysis of Close to Home: NewHacks 2024",
-    description: "A methodological breakdown of our winning hackathon submission, examining the architectural decisions and technical challenges in developing a disaster response system.",
-    date: "2024-01-02",
-    image: "/Newhacks.png",
-    contentPath: "/blog-posts/surviving-newhacks.html",
-  },
-];
-
 
 const BlogContent = ({ post, onClose }: { post: BlogPost; onClose: () => void }) => {
   const [content, setContent] = useState('');
