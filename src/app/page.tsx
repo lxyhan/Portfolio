@@ -7,7 +7,7 @@ import Tech from '../components/tech';
 import Contributions from '../components/contributions';
 import Blog from '../components/blog';
 import type { BlogPost } from '@/types/blog';
-import { useRouter, useSearchParams } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { slugify } from '@/utils/slug';
 
 const posts: BlogPost[] = [
