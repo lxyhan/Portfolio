@@ -94,6 +94,19 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => (
 const ProjectsSection: React.FC = () => {
   const projects: Project[] = [
     {
+      "title": "Persona - AI Language Tutor",
+      "description": "UofTHacks 2025 1st Place: Real-time AI language learning assistant combining computer vision, 3D animation, and natural conversation for personalized tutoring.",
+      "github": "https://github.com/lxyhan/Persona-UofT-Hacks-12",
+      "githubUsername": "lxyhan",
+      "technologies": [
+        { "icon": "react-plain", "name": "React" },
+        { "icon": "tensorflow-original", "name": "TensorFlow" },
+        { "icon": "pytorch-original", "name": "PyTorch" },
+        { "icon": "threejs-original", "name": "Three.js" },
+        { "icon": "opencv-original", "name": "OpenCV" }
+      ]
+    },
+    {
         title: "Brampton Tennis Queue",
         description: "City of Brampton's recreation team to launch this Queuing app in local courts by Summer 2025!",
         technologies: [
@@ -152,18 +165,6 @@ const ProjectsSection: React.FC = () => {
         { icon: 'django-plain', name: 'Django' },
         { icon: 'docker-plain', name: 'Docker' },
         { icon: 'kubernetes-plain', name: 'K8s' }
-      ]
-    },
-    {
-      title: "Weather Analytics",
-      description: "Advanced weather visualization platform with real-time analytics and dynamic UI theming.",
-      github: "https://github.com/username/weather-analytics",
-      githubUsername: "username",
-      technologies: [
-        { icon: 'javascript-plain', name: 'JavaScript' },
-        { icon: 'sass-original', name: 'Sass' },
-        { icon: 'webpack-plain', name: 'Webpack' },
-        { icon: 'bootstrap-plain', name: 'Bootstrap' }
       ]
     }
   ];
