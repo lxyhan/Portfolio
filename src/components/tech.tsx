@@ -103,7 +103,7 @@ const TechStackSection = () => {
   };
 
   return (
-    <section className="max-w-3xl mx-auto mt-6">
+    <section className="w-full mt-6">
       <div className="flex items-center justify-between mb-2">
         <h2 className="text-lg font-medium text-gray-900">Technical Stack</h2>
         <div className="relative">

@@ -51,7 +51,7 @@ const PersonalHeader = () => {
   ];
 
   return (
-    <section className="max-w-2xl mx-auto">
+    <section className="w-full">
       <div className="relative flex flex-col md:flex-row gap-6">
         {/* Decorative elements */}
         <div className="hidden md:block absolute -left-4 top-0 w-px h-16 bg-gradient-to-b from-gray-200 to-transparent" />

@@ -1,8 +1,9 @@
+// components/blog.tsx
 import React from 'react';
-import { Calendar, ArrowUpRight } from 'lucide-react';
 import type { BlogPost } from '@/types/blog';
 
 interface BlogSectionProps {
+  posts: BlogPost[];
   selectedPost: BlogPost | null;
   onPostClick: (post: BlogPost) => void;
 }
@@ -10,94 +11,93 @@ interface BlogSectionProps {
 interface BlogCardProps {
   post: BlogPost;
   onClick: () => void;
+  index: number;
 }
 
-const BlogCard = ({ post, onClick }: BlogCardProps) => (
-  <div 
-    onClick={onClick}
-    className="group relative flex gap-4 py-3 border-b border-gray-100 last:border-b-0 cursor-pointer hover:bg-gray-50 transition-colors"
-    role="button"
-    tabIndex={0}
-    onKeyDown={(e: React.KeyboardEvent) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        onClick();
-      }
-    }}
-  >
-    <div className="relative w-24 h-24 overflow-hidden rounded-md flex-shrink-0">
-      <img
-        src={post.image}
-        alt={`Cover image for ${post.title}`}
-        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-      />
-    </div>
-    <div className="flex-1 min-w-0 flex flex-col justify-between">
-      <div>
-        <div className="flex items-center gap-1.5 text-xs text-gray-500 mb-1">
-          <Calendar className="w-3 h-3" />
-          <time dateTime={post.date}>
-            {new Date(post.date).toLocaleDateString('en-US', {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric'
-            })}
-          </time>
+const BlogCard = ({ post, onClick, index }: BlogCardProps) => {
+  const readingTime = Math.ceil((post.content?.split(' ').length || 500) / 200);
+  
+  return (
+    <article 
+      onClick={onClick}
+      className="group flex gap-3 py-3 cursor-pointer hover:bg-gray-50 -mx-3 px-3 rounded transition-all"
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e: React.KeyboardEvent) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick();
+        }
+      }}
+    >
+      {/* Compact image */}
+      <div className="relative w-16 h-16 overflow-hidden bg-gray-100 flex-shrink-0">
+        <img
+          src={post.image}
+          alt=""
+          className="w-full h-full object-cover"
+        />
+      </div>
+      
+      {/* Content */}
+      <div className="flex-1 min-w-0">
+        <div className="flex items-baseline gap-2 mb-0.5">
+          <span className="font-mono text-xs text-gray-400">
+            {String(index).padStart(2, '0')}
+          </span>
+          <h3 className="font-serif text-base text-gray-900 line-clamp-1 group-hover:text-gray-600 transition-colors">
+            {post.title}
+          </h3>
         </div>
-        <h3 className="text-sm font-medium text-gray-900 mb-1 line-clamp-1">
-          {post.title}
-        </h3>
-        <p className="text-xs text-gray-600 line-clamp-2">
+        
+        <p className="text-xs text-gray-600 line-clamp-1 mb-1">
           {post.description}
         </p>
+        
+        <div className="flex items-center gap-3 text-xs font-mono text-gray-400">
+          <time dateTime={post.date}>
+            {new Date(post.date).toLocaleDateString('en-US', {
+              month: 'short',
+              day: 'numeric',
+              year: '2-digit'
+            }).toUpperCase()}
+          </time>
+          <span>·</span>
+          <span>{readingTime}M</span>
+        </div>
       </div>
-      <div className="mt-1">
-        <span className="inline-flex items-center gap-1 text-xs text-gray-900 group-hover:text-gray-600 transition-colors">
-          Read post
-          <ArrowUpRight className="w-3 h-3" />
-        </span>
-      </div>
-    </div>
-  </div>
-);
+    </article>
+  );
+};
 
-const Blog = ({ onPostClick }: BlogSectionProps) => {
-  const posts: BlogPost[] = [
-    {
-      title: "On Distance Running: Reflections from the UofT Run Club",
-      description: "4 Months ago I started organizing runs for the UofT Run Club, Here's the story.",
-      date: "2024-09-01",
-      image: "/Running.JPG",
-      contentPath: "/blog-posts/running-revolution.html"
-    },
-    {
-      title: "Surviving (and Winning!) my first University Hackathon",
-      description: "24 hours of pure chaos and creativity: no registration, an impromptu team that clicked instantly, and a git reset that wiped my laptop keychain clean five minutes in.",
-      date: "2024-10-28",
-      image: "/Newhacks.png",
-      contentPath: "/blog-posts/surviving-newhacks.html"
-    }
-  ];
-
+const Blog = ({ posts, selectedPost, onPostClick }: BlogSectionProps) => {
   return (
-    <section className="max-w-3xl mx-auto order-last xl:order-none">
-      <div className="mb-4">
-        <h2 className="text-lg font-medium text-gray-900 mb-1">
-          Blog
+    <section className="w-full">
+      <header className="mb-4 pb-3 border-b border-gray-200">
+        <h2 className="font-serif text-xl text-gray-900 mb-0.5">
+          Selected Writings
         </h2>
-        <p className="text-sm text-gray-600">
-          Selected writings on software design, athletics, and university life.
+        <p className="text-xs text-gray-600">
+          Essays on hackathons, endurance sports, strength training, and observations from UofT Compsci.
         </p>
-      </div>
-      <div className="divide-y divide-gray-100">
-        {posts.map((post, i) => (
+      </header>
+      
+      <div className="space-y-0 divide-y divide-gray-100">
+        {posts.map((post, index) => (
           <BlogCard 
-            key={i} 
+            key={post.slug} 
             post={post} 
             onClick={() => onPostClick(post)}
+            index={index + 1}
           />
         ))}
       </div>
+      
+      {posts.length === 0 && (
+        <p className="text-xs text-gray-500 italic py-3">
+          No writings published yet.
+        </p>
+      )}
     </section>
   );
 };
