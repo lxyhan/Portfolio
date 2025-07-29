@@ -49,7 +49,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
 
   return (
     <>
-      <main className="min-h-screen bg-white xl:h-screen xl:overflow-hidden">
+      <main className="min-h-screen bg-white lg:h-screen lg:overflow-hidden">
         <style jsx global>{`
           @keyframes fadeIn {
             from {
@@ -63,7 +63,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
           }
 
           ::-webkit-scrollbar {
-            width: 6px;
+            width: 4px;
           }
 
           ::-webkit-scrollbar-track {
@@ -72,7 +72,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
 
           ::-webkit-scrollbar-thumb {
             background: rgba(0, 0, 0, 0.2);
-            border-radius: 3px;
+            border-radius: 2px;
           }
 
           ::-webkit-scrollbar-thumb:hover {
@@ -87,40 +87,65 @@ export default function HomeClient({ posts }: HomeClientProps) {
           .animate-in {
             animation: fadeIn 0.5s ease-out forwards;
           }
+
+          /* Single column gallery */
+          .gallery-single-column img {
+            width: 100% !important;
+            margin-bottom: 0.75rem;
+          }
         `}</style>
 
-        <div className="xl:h-screen xl:flex xl:justify-center">
-          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 xl:gap-8 p-6 xl:p-8 max-w-[1800px] mx-auto w-full">
-            {/* Left Column - Profile & Blog */}
-            <div className="xl:w-[500px] xl:h-screen xl:py-8 xl:-my-8 flex-shrink-0">
-              <div className="xl:sticky xl:top-8 space-y-8">
-                <Profile />
-                <div className="xl:min-h-[400px]">
+        <div className="lg:h-screen lg:flex lg:justify-center">
+          {/* Container with uniform padding */}
+          <div className="grid grid-cols-1 gap-4 p-6 lg:gap-2 lg:p-6 max-w-none mx-auto w-full lg:grid-cols-[420px_1fr_280px] lg:grid-rows-1">
+            
+            {/* Left Column - Profile, Blog (scrollable), Tech Stack */}
+            <div className="lg:h-screen lg:py-6 lg:-my-6 flex-shrink-0">
+              <div className="lg:h-full lg:flex lg:flex-col lg:border-r lg:border-gray-100 lg:pr-2">
+                {/* Profile - fixed at top */}
+                <div className="lg:flex-shrink-0">
+                  <Profile />
+                </div>
+                
+                {/* Subtle divider */}
+                <div className="hidden lg:block border-t border-gray-100"></div>
+                
+                {/* Blog - scrollable middle section */}
+                <div className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto lg:pr-2 lg:pt-2">
                   <Blog posts={posts} selectedPost={selectedPost} onPostClick={handlePostSelect} />
+                </div>
+                
+                {/* Subtle divider */}
+                <div className="hidden lg:block border-t border-gray-100"></div>
+                
+                {/* Tech Stack - fixed at bottom */}
+                <div className="lg:flex-shrink-0">
+                  <Tech />
                 </div>
               </div>
             </div>
 
-            {/* Middle Column - Projects & Tech or Blog Post */}
-            <div className="xl:w-[550px] xl:h-screen xl:overflow-y-auto xl:py-8 xl:-my-8 flex-shrink-0">
-              <div className="space-y-8 xl:pr-4">
+            {/* Middle Column - Projects & Tech or Blog Post (gets most space) */}
+            <div className="lg:h-screen lg:py-6 lg:-my-6 flex-shrink-0 lg:min-w-0 lg:overflow-hidden">
+              <div className="lg:h-full lg:flex lg:flex-col lg:px-2 lg:border-r lg:border-gray-100">
                 {selectedPost ? (
-                  <div className="animate-in h-[calc(100vh-12rem)] xl:h-[calc(100vh-6rem)]">
+                  <div className="animate-in h-[calc(100vh-12rem)] lg:h-[calc(100vh-6rem)]">
                     <BlogPostDisplay post={selectedPost} onClose={handlePostClose} />
                   </div>
                 ) : (
                   <>
-                    <Projects />
-                    <Tech />
-                    {/* <Contributions /> */}
+                    {/* Projects component - now gets much more space! */}
+                    <div className="lg:flex-1 lg:min-h-0 lg:mb-4 lg:mt-2">
+                      <Projects />
+                    </div>
                   </>
                 )}
               </div>
             </div>
 
-            {/* Right Column - Gallery */}
-            <div className="xl:w-[500px] xl:h-screen xl:overflow-y-auto xl:py-8 xl:-my-8 flex-shrink-0">
-              <div className="xl:pr-4 h-full">
+            {/* Right Column - Gallery (narrow, single column) */}
+            <div className="lg:h-screen lg:overflow-y-auto lg:py-6 lg:-my-6 flex-shrink-0">
+              <div className="h-full lg:gallery-single-column lg:pl-2">
                 <Gallery />
               </div>
             </div>
@@ -129,7 +154,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
 
         {/* Mobile Blog Overlay */}
         {selectedPost && (
-          <div className="xl:hidden">
+          <div className="lg:hidden">
             <MobileBlogOverlay post={selectedPost} onClose={handlePostClose} />
           </div>
         )}

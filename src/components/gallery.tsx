@@ -95,7 +95,7 @@ const MediaModal: React.FC<MediaModalProps> = ({ item, isOpen, onClose }) => {
           onClick={onClose}
           className="text-xs text-gray-600 hover:text-gray-900 transition-colors"
         >
-          ← Back to grid
+          ← Back
         </button>
       </div>
       
@@ -109,7 +109,7 @@ const MediaModal: React.FC<MediaModalProps> = ({ item, isOpen, onClose }) => {
               loading="lazy"
             />
           ) : (
-            <div className="w-full aspect-video max-w-2xl">
+            <div className="w-full aspect-video">
               <iframe
                 src={getEmbedUrl(item.external || '')}
                 className="w-full h-full"
@@ -130,42 +130,42 @@ const MediaModal: React.FC<MediaModalProps> = ({ item, isOpen, onClose }) => {
           
           {(item.date || item.location || item.camera || item.lens || item.duration || item.resolution) && (
             <div className="pt-2 border-t border-gray-200">
-              <dl className="grid grid-cols-2 gap-x-4 gap-y-1">
+              <dl className="space-y-1">
                 {item.date && (
-                  <>
+                  <div className="flex justify-between">
                     <dt className="text-xs text-gray-500">Date</dt>
                     <dd className="text-xs text-gray-900">{item.date}</dd>
-                  </>
+                  </div>
                 )}
                 {item.location && (
-                  <>
+                  <div className="flex justify-between">
                     <dt className="text-xs text-gray-500">Location</dt>
                     <dd className="text-xs text-gray-900">{item.location}</dd>
-                  </>
+                  </div>
                 )}
                 {item.camera && (
-                  <>
+                  <div className="flex justify-between">
                     <dt className="text-xs text-gray-500">Camera</dt>
                     <dd className="text-xs text-gray-900">{item.camera}</dd>
-                  </>
+                  </div>
                 )}
                 {item.lens && (
-                  <>
+                  <div className="flex justify-between">
                     <dt className="text-xs text-gray-500">Lens</dt>
                     <dd className="text-xs text-gray-900">{item.lens}</dd>
-                  </>
+                  </div>
                 )}
                 {item.duration && (
-                  <>
+                  <div className="flex justify-between">
                     <dt className="text-xs text-gray-500">Duration</dt>
                     <dd className="text-xs text-gray-900">{item.duration}</dd>
-                  </>
+                  </div>
                 )}
                 {item.resolution && (
-                  <>
+                  <div className="flex justify-between">
                     <dt className="text-xs text-gray-500">Resolution</dt>
                     <dd className="text-xs text-gray-900">{item.resolution}</dd>
-                  </>
+                  </div>
                 )}
               </dl>
             </div>
@@ -209,12 +209,12 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
     : item.thumbnail || item.src;
 
   return (
-    <div className="group cursor-pointer" onClick={onClick}>
-      <div className="aspect-square bg-gray-100 relative mb-1">
+    <div className="group cursor-pointer mb-3" onClick={onClick}>
+      <div className="aspect-square bg-gray-100 relative mb-1.5">
         <img
           src={thumbnailSrc}
           alt={item.title}
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover rounded"
           loading="lazy"
           onError={(e) => {
             const target = e.target as HTMLImageElement;
@@ -223,23 +223,23 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
         />
         
         {item.type === 'video' && (
-          <div className="absolute bottom-1 right-1">
+          <div className="absolute bottom-1.5 right-1.5">
             <Play className="w-3 h-3 text-white drop-shadow-lg" />
           </div>
         )}
         
         {item.external && (
-          <div className="absolute top-1 right-1">
+          <div className="absolute top-1.5 right-1.5">
             <ExternalLink className="w-2.5 h-2.5 text-white drop-shadow-lg" />
           </div>
         )}
       </div>
       
-      <div className="space-y-0">
-        <h4 className="text-xs font-medium text-gray-900 leading-tight">{item.title}</h4>
-        <div className="text-[10px] text-gray-500">
+      <div className="space-y-0.5">
+        <h4 className="text-xs font-medium text-gray-900 leading-tight line-clamp-2">{item.title}</h4>
+        <div className="text-[10px] text-gray-500 space-y-0.5">
           {item.date && <div>{item.date}</div>}
-          {item.location && <div>{item.location}</div>}
+          {item.location && <div className="line-clamp-1">{item.location}</div>}
         </div>
       </div>
     </div>
@@ -249,6 +249,26 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
 const Gallery: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<MediaItem | null>(null);
   const [filter, setFilter] = useState<'all' | 'photo' | 'video'>('all');
+
+  const scrollbarStyles = `
+    .gallery-scrollbar::-webkit-scrollbar {
+      width: 0.5px;
+    }
+    .gallery-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .gallery-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: 0px;
+    }
+    .gallery-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+    .gallery-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 0, 0, 0.02) transparent;
+    }
+  `;
 
   const mediaItems: MediaItem[] = [
     {
@@ -274,7 +294,7 @@ const Gallery: React.FC = () => {
       description: 'Dual-player computer vision fitness game demonstration showcasing real-time pose detection and collaborative gameplay mechanics.',
       date: 'July 2025',
       location: 'Hack the 6ix, filmed in 57 St. Joseph Street',
-      external: 'https://youtu.be/PGPgzu2f-0Y', // Auto-generates thumbnail
+      external: 'https://youtu.be/PGPgzu2f-0Y',
       duration: '2:34',
       resolution: '4K',
       fps: '60fps',
@@ -319,7 +339,7 @@ const Gallery: React.FC = () => {
       description: 'AI workflow orchestrator demonstration featuring 3D avatar guidance and distributed microservices architecture.',
       date: 'December 2024',
       location: 'SpurHacks',
-      external: 'https://youtu.be/V2578vWWx10', // Auto-generates thumbnail
+      external: 'https://youtu.be/V2578vWWx10',
       duration: '1:47',
       resolution: '1080p',
       fps: '24fps',
@@ -348,10 +368,12 @@ const Gallery: React.FC = () => {
 
   return (
     <section className="w-full h-full flex flex-col">
-      <div className="mb-6 flex-shrink-0">
+      <style dangerouslySetInnerHTML={{ __html: scrollbarStyles }} />
+      
+      <div className="mb-4 flex-shrink-0">
         <h2 className="text-lg font-medium text-gray-900 mb-1">Gallery</h2>
-        <p className="text-sm text-gray-600 mb-4">
-          A collection of digital and film photography / footage from my life.
+        <p className="text-sm text-gray-600 mb-3">
+          Photos and videos from my life.
         </p>
         
         <div className="flex text-xs text-gray-600 border-b border-gray-200">
@@ -359,7 +381,7 @@ const Gallery: React.FC = () => {
             <button
               key={filterType}
               onClick={() => setFilter(filterType)}
-              className={`pb-2 px-0 mr-6 transition-colors ${
+              className={`pb-2 px-0 mr-4 transition-colors ${
                 filter === filterType
                   ? 'text-gray-900 border-b-2 border-gray-900'
                   : 'hover:text-gray-900'
@@ -371,24 +393,19 @@ const Gallery: React.FC = () => {
         </div>
       </div>
 
-      <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
+      <div className="flex-1 overflow-y-auto gallery-scrollbar">
         <style jsx>{`
-          .custom-scrollbar::-webkit-scrollbar {
-            width: 1px;
+          .line-clamp-1 {
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
           }
-          .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-          }
-          .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 1px;
-          }
-          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 0, 0, 0.15);
-          }
-          .custom-scrollbar {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
+          .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
           }
         `}</style>
         
@@ -399,7 +416,7 @@ const Gallery: React.FC = () => {
             onClose={() => setSelectedItem(null)}
           />
         ) : (
-          <div className="grid grid-cols-2 gap-2">
+          <div className="space-y-0">
             {filteredItems.map((item) => (
               <MediaCard
                 key={item.id}

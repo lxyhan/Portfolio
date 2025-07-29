@@ -1,4 +1,3 @@
-// components/blog.tsx
 import React from 'react';
 import type { BlogPost } from '@/types/blog';
 
@@ -71,9 +70,32 @@ const BlogCard = ({ post, onClick, index }: BlogCardProps) => {
 };
 
 const Blog = ({ posts, onPostClick }: BlogSectionProps) => {
+  const scrollbarStyles = `
+    .blog-scrollbar::-webkit-scrollbar {
+      width: 1px;
+    }
+    .blog-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .blog-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.05);
+      border-radius: 0px;
+    }
+    .blog-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.08);
+    }
+    .blog-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 0, 0, 0.05) transparent;
+    }
+  `;
+
   return (
-    <section className="w-full">
-      <header className="mb-4 pb-3 border-b border-gray-200">
+    <section className="w-full h-full flex flex-col">
+      <style dangerouslySetInnerHTML={{ __html: scrollbarStyles }} />
+      
+      {/* Sticky Header */}
+      <header className="flex-shrink-0 mb-4 pb-3 border-b border-gray-200 bg-white sticky top-0 z-10">
         <h2 className="font-serif text-xl text-gray-900 mb-0.5">
           Selected Writings
         </h2>
@@ -82,22 +104,25 @@ const Blog = ({ posts, onPostClick }: BlogSectionProps) => {
         </p>
       </header>
       
-      <div className="space-y-0 divide-y divide-gray-100">
-        {posts.map((post, index) => (
-          <BlogCard 
-            key={post.slug} 
-            post={post} 
-            onClick={() => onPostClick(post)}
-            index={index + 1}
-          />
-        ))}
+      {/* Scrollable Content */}
+      <div className="flex-1 overflow-y-auto overflow-x-hidden pr-1 blog-scrollbar">
+        <div className="">
+          {posts.map((post, index) => (
+            <BlogCard 
+              key={post.slug} 
+              post={post} 
+              onClick={() => onPostClick(post)}
+              index={index + 1}
+            />
+          ))}
+        </div>
+        
+        {posts.length === 0 && (
+          <p className="text-xs text-gray-500 italic py-3">
+            No writings published yet.
+          </p>
+        )}
       </div>
-      
-      {posts.length === 0 && (
-        <p className="text-xs text-gray-500 italic py-3">
-          No writings published yet.
-        </p>
-      )}
     </section>
   );
 };

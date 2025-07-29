@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, Video } from 'lucide-react';
+import { Github, Video, Image } from 'lucide-react';
 
 interface Technology {
   icon: string;
@@ -21,8 +21,8 @@ interface ProjectCardProps {
 }
 
 const TechStack: React.FC<{ technologies: Technology[] }> = ({ technologies }) => (
-    <div className="flex flex-col items-end gap-2">
-    <div className="flex flex-wrap justify-end gap-2 max-w-[200px]">
+  <div className="flex flex-col items-end gap-1.5">
+    <div className="flex flex-wrap justify-end gap-2 max-w-[180px]">
       {technologies.map((tech, i) => (
         <i
           key={i}
@@ -31,7 +31,7 @@ const TechStack: React.FC<{ technologies: Technology[] }> = ({ technologies }) =
         />
       ))}
     </div>
-    <div className="text-[11px] text-gray-500 text-right max-w-[150px] flex flex-wrap justify-end gap-x-2">
+    <div className="text-[10px] text-gray-500 text-right max-w-[150px] flex flex-wrap justify-end gap-x-1.5 leading-tight">
       {technologies.map((tech, i) => (
         <span key={i}>{tech.name}</span>
       ))}
@@ -40,64 +40,113 @@ const TechStack: React.FC<{ technologies: Technology[] }> = ({ technologies }) =
 );
 
 const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => (
-  <div className="group py-4 border-b border-gray-100 last:border-b-0">
-    <div className="flex items-start justify-between gap-8">
-      <div className="space-y-1.5 flex-1">
-        <div className="flex items-center gap-3">
-          {project.icon && (
-            <img 
-              src={project.icon} 
-              alt={`${project.title} logo`} 
-              className="w-6 h-6 object-contain"
-            />
-          )}
-          <h3 className="text-sm font-medium text-gray-900">{project.title}</h3>
-          <div className="flex items-center gap-2">
-            {project.github && (
-              <a
-                href={project.github}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors group/link"
-              >
-                <Github className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline group-hover/link:underline">View Source</span>
-                {project.githubUsername && (
-                  <img 
-                    src={`https://img.shields.io/github/commit-activity/t/${project.githubUsername}/${project.github.split('/').pop()}?style=flat-square&label=commits`}
-                    alt="GitHub commit count"
-                    className="h-4"
-                  />
-                )}
-              </a>
-            )}
-            {project.video && (
-              <a
-                href={project.video}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors group/link"
-              >
-                <Video className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline group-hover/link:underline">Watch Demo</span>
-              </a>
-            )}
+  <div className="group py-3 border-b border-gray-100 last:border-b-0">
+    <div className="flex items-start gap-4">
+      {/* Left side - Media thumbnail */}
+      <div className="flex-shrink-0 relative">
+        {project.video ? (
+          <a
+            href={project.video}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block w-20 h-12 bg-gray-900 rounded-lg overflow-hidden group/video hover:scale-105 transition-transform cursor-pointer"
+          >
+            <div className="w-full h-full bg-gradient-to-br from-red-600 to-red-700 flex items-center justify-center relative">
+              <div className="w-0 h-0 border-l-[8px] border-l-white border-t-[6px] border-t-transparent border-b-[6px] border-b-transparent ml-1"></div>
+              <div className="absolute inset-0 bg-black/20 group-hover/video:bg-black/10 transition-colors"></div>
+              <div className="absolute top-1 right-1 text-[8px] font-bold text-white bg-black/50 px-1 rounded">HD</div>
+            </div>
+          </a>
+        ) : (
+          <div className="w-20 h-12 bg-gray-100 rounded-lg overflow-hidden flex items-center justify-center">
+            <div className="w-full h-full bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+              <Image className="w-6 h-6 text-gray-500" />
+            </div>
           </div>
-        </div>
-        <p className="text-xs text-gray-600 leading-relaxed pr-4">{project.description}</p>
+        )}
       </div>
-      <TechStack technologies={project.technologies} />
+
+      {/* Main content */}
+      <div className="flex items-start justify-between gap-6 flex-1">
+        <div className="space-y-1.5 flex-1">
+          <div className="flex items-center gap-3">
+            {project.icon && (
+              <img 
+                src={project.icon} 
+                alt={`${project.title} logo`} 
+                className="w-5 h-5 object-contain"
+              />
+            )}
+            <h3 className="text-sm font-medium text-gray-900">{project.title}</h3>
+            <div className="flex items-center gap-2">
+              {project.github && (
+                <a
+                  href={project.github}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors group/link"
+                >
+                  <Github className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline group-hover/link:underline">View Source</span>
+                  {project.githubUsername && (
+                    <img 
+                      src={`https://img.shields.io/github/commit-activity/t/${project.githubUsername}/${project.github.split('/').pop()}?style=flat-square&label=commits`}
+                      alt="GitHub commit count"
+                      className="h-4"
+                    />
+                  )}
+                </a>
+              )}
+              {project.video && (
+                <a
+                  href={project.video}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-1.5 text-xs text-gray-600 hover:text-gray-900 transition-colors group/link"
+                >
+                  <Video className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline group-hover/link:underline">Watch Demo</span>
+                </a>
+              )}
+            </div>
+          </div>
+          <p className="text-xs text-gray-600 leading-relaxed pr-4">{project.description}</p>
+        </div>
+        
+        <TechStack technologies={project.technologies} />
+      </div>
     </div>
   </div>
 );
 
 const ProjectsSection: React.FC = () => {
+  const scrollbarStyles = `
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 0.5px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.02);
+      border-radius: 0px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+      background: rgba(0, 0, 0, 0.04);
+    }
+    .custom-scrollbar {
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 0, 0, 0.02) transparent;
+    }
+  `;
+
   const projects: Project[] = [
     {
       "title": "UofTHacks 2025 1st Place",
       "description": "Persona - AI Language Tutor: Real-time AI language learning assistant combining computer vision, 3D animation, and natural conversation for personalized tutoring.",
       "github": "https://github.com/lxyhan/Persona-UofT-Hacks-12",
       "githubUsername": "lxyhan",
+      "video": "https://example.com/persona-demo",
       "technologies": [
         { "icon": "react-plain", "name": "React" },
         { "icon": "tensorflow-original", "name": "TensorFlow" },
@@ -122,6 +171,7 @@ const ProjectsSection: React.FC = () => {
       "description": "Polaris - CV Fitness Game: Open-world collaborative fitness game using computer vision to track dual players from single camera. Custom 3D engine with sub-300ms latency.",
       "github": "https://github.com/lxyhan/polaris-fitness",
       "githubUsername": "lxyhan",
+      "video": "https://example.com/polaris-demo",
       "technologies": [
         { "icon": "threejs-original", "name": "Three.js" },
         { "icon": "opencv-original", "name": "OpenCV" },
@@ -207,33 +257,17 @@ const ProjectsSection: React.FC = () => {
   ];
 
   return (
-    <section className="w-full">
-      <div className="mb-4">
+    <section className="w-full h-full flex flex-col">
+      <style dangerouslySetInnerHTML={{ __html: scrollbarStyles }} />
+      
+      <div className="flex-shrink-0 mb-4">
         <h2 className="text-lg font-medium text-gray-900 mb-2">Featured Projects</h2>
         <p className="text-sm text-gray-600">My area of expertise is in backend web programming. I am also highly experienced
             with modern frontend design and performance optimization tools and protocols.
         </p>
       </div>
-      <div className="max-h-[600px] overflow-y-auto pr-1 custom-scrollbar">
-        <style jsx>{`
-          .custom-scrollbar::-webkit-scrollbar {
-            width: 1px;
-          }
-          .custom-scrollbar::-webkit-scrollbar-track {
-            background: transparent;
-          }
-          .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.1);
-            border-radius: 1px;
-          }
-          .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 0, 0, 0.15);
-          }
-          .custom-scrollbar {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(0, 0, 0, 0.1) transparent;
-          }
-        `}</style>
+      
+      <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
         <div className="divide-y divide-gray-100">
           {projects.map((project, i) => (
             <ProjectCard key={i} project={project} />
