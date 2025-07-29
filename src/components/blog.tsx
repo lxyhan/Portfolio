@@ -70,7 +70,7 @@ const BlogCard = ({ post, onClick, index }: BlogCardProps) => {
   );
 };
 
-const Blog = ({ posts, selectedPost, onPostClick }: BlogSectionProps) => {
+const Blog = ({ posts, onPostClick }: BlogSectionProps) => {
   return (
     <section className="w-full">
       <header className="mb-4 pb-3 border-b border-gray-200">
