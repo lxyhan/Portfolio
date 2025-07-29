@@ -208,9 +208,18 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
     ? item.thumbnail || getVideoThumbnail(item.external)
     : item.thumbnail || item.src;
 
-  return (
+  // Create more detailed camera info for card display
+  const cameraSpecs = [];
+  if (item.camera) cameraSpecs.push(item.camera);
+  if (item.focalLength) cameraSpecs.push(item.focalLength);
+  if (item.aperture) cameraSpecs.push(item.aperture);
+  
+  const cameraInfo = cameraSpecs.join(' • ');
+  const secondRowInfo = cameraInfo || item.location || '';
+
+      return (
     <div className="group cursor-pointer mb-3" onClick={onClick}>
-      <div className="aspect-square bg-gray-100 relative mb-1.5">
+      <div className="aspect-square bg-gray-100 relative mb-2">
         <img
           src={thumbnailSrc}
           alt={item.title}
@@ -235,12 +244,13 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
         )}
       </div>
       
-      <div className="space-y-0.5">
-        <h4 className="text-xs font-medium text-gray-900 leading-tight line-clamp-2">{item.title}</h4>
-        <div className="text-[10px] text-gray-500 space-y-0.5">
-          {item.date && <div>{item.date}</div>}
-          {item.location && <div className="line-clamp-1">{item.location}</div>}
-        </div>
+      <div className="space-y-1">
+        <h4 className="text-xs font-medium text-gray-900 leading-tight line-clamp-1 font-serif">{item.title}</h4>
+        {secondRowInfo && (
+          <div className="text-[10px] text-gray-500 line-clamp-1 font-serif">
+            {secondRowInfo}
+          </div>
+        )}
       </div>
     </div>
   );
@@ -248,7 +258,6 @@ const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
 
 const Gallery: React.FC = () => {
   const [selectedItem, setSelectedItem] = useState<MediaItem | null>(null);
-  const [filter, setFilter] = useState<'all' | 'photo' | 'video'>('all');
 
   const scrollbarStyles = `
     .gallery-scrollbar::-webkit-scrollbar {
@@ -272,39 +281,10 @@ const Gallery: React.FC = () => {
 
   const mediaItems: MediaItem[] = [
     {
-      id: '1',
-      type: 'photo',
-      src: '/gallery/Crosswalk.png',
-      title: 'i look to you and i see nothing',
-      description: 'My view from living at CampusOne in Summer 2024.',
-      date: 'June 2024',
-      location: 'College and Spadina',
-      camera: 'Canon EOS Rebel T4',
-      lens: 'RF 24-70mm f/2.8L IS USM',
-      focalLength: '125mm',
-      aperture: 'f/2.8',
-      shutterSpeed: '1/60s',
-      iso: 'ISO 800',
-      tags: ['Street Photography']
-    },
-    {
-      id: '2',
-      type: 'video',
-      title: 'Polaris',
-      description: 'Dual-player computer vision fitness game demonstration showcasing real-time pose detection and collaborative gameplay mechanics.',
-      date: 'July 2025',
-      location: 'Hack the 6ix, filmed in 57 St. Joseph Street',
-      external: 'https://youtu.be/PGPgzu2f-0Y',
-      duration: '2:34',
-      resolution: '4K',
-      fps: '60fps',
-      tags: ['game', 'fitness', 'computer vision', 'multiplayer']
-    },
-    {
       id: '3',
       type: 'photo',
       src: '/gallery/Tired.png',
-      title: '"if you can do this, you can do anything!"',
+      title: 'Muskoka Ironman 70.3',
       description: 'Running to the finish line at my first Ironman 70.3 in Muskoka, pushing a 4:30 min / km pace at the last 3k. I look like I am melting.',
       date: 'July 2025',
       location: 'Huntsville, Ontario',
@@ -316,11 +296,27 @@ const Gallery: React.FC = () => {
       iso: 'ISO 400',
       tags: ['team', 'hackathon', 'award', 'celebration']
     },
+
+      {
+        id: '6',
+        type: 'photo',
+        src: '/gallery/fairylake.png',
+        title: 'Fairy Lake 1.9km Swim',
+        description: 'No clue what I was thinking. ',
+        date: 'January 2025',
+        camera: 'Canon EOS R6 Mark II',
+        lens: 'RF 16-35mm f/2.8L IS USM',
+        focalLength: '24mm',
+        aperture: 'f/4.0',
+        shutterSpeed: '1/30s',
+        iso: 'ISO 3200',
+        tags: ['workspace', 'development', 'setup', 'programming']
+      },
     {
       id: '4',
       type: 'photo',
-      src: '/gallery/Milton.JPG',
-      title: 'blue gulfport',
+      src: '/gallery/milton.png',
+      title: 'Milton Duathlon 2025',
       description: 'racing my first duathlon in Milton. swim was cancelled due to the temp',
       date: 'November 2024',
       location: 'Kelso Conservation Area',
@@ -331,66 +327,18 @@ const Gallery: React.FC = () => {
       shutterSpeed: '1/80s',
       iso: 'ISO 1600',
       tags: ['government', 'presentation', 'municipal', 'deployment']
-    },
-    {
-      id: '5',
-      type: 'video',
-      title: 'Conductor AI Demo',
-      description: 'AI workflow orchestrator demonstration featuring 3D avatar guidance and distributed microservices architecture.',
-      date: 'December 2024',
-      location: 'SpurHacks',
-      external: 'https://youtu.be/V2578vWWx10',
-      duration: '1:47',
-      resolution: '1080p',
-      fps: '24fps',
-      tags: ['AI', 'automation', 'microservices', 'workflow']
-    },
-    {
-      id: '6',
-      type: 'photo',
-      src: '/gallery/Viewing.HEIC',
-      title: '2 cool 4 skool',
-      description: 'No clue what I was thinking. ',
-      date: 'January 2025',
-      camera: 'Canon EOS R6 Mark II',
-      lens: 'RF 16-35mm f/2.8L IS USM',
-      focalLength: '24mm',
-      aperture: 'f/4.0',
-      shutterSpeed: '1/30s',
-      iso: 'ISO 3200',
-      tags: ['workspace', 'development', 'setup', 'programming']
     }
   ];
-
-  const filteredItems = mediaItems.filter(item => 
-    filter === 'all' || item.type === filter
-  );
 
   return (
     <section className="w-full h-full flex flex-col">
       <style dangerouslySetInnerHTML={{ __html: scrollbarStyles }} />
       
       <div className="mb-4 flex-shrink-0">
-        <h2 className="text-lg font-medium text-gray-900 mb-1">Gallery</h2>
-        <p className="text-sm text-gray-600 mb-3">
+        <h2 className="text-lg font-medium text-gray-900 mb-1 font-serif">Gallery</h2>
+        <p className="text-sm text-gray-600 font-serif">
           Photos and videos from my life.
         </p>
-        
-        <div className="flex text-xs text-gray-600 border-b border-gray-200">
-          {(['all', 'photo', 'video'] as const).map((filterType) => (
-            <button
-              key={filterType}
-              onClick={() => setFilter(filterType)}
-              className={`pb-2 px-0 mr-4 transition-colors ${
-                filter === filterType
-                  ? 'text-gray-900 border-b-2 border-gray-900'
-                  : 'hover:text-gray-900'
-              }`}
-            >
-              {filterType === 'all' ? 'All' : filterType === 'photo' ? 'Photos' : 'Videos'}
-            </button>
-          ))}
-        </div>
       </div>
 
       <div className="flex-1 overflow-y-auto gallery-scrollbar">
@@ -416,8 +364,8 @@ const Gallery: React.FC = () => {
             onClose={() => setSelectedItem(null)}
           />
         ) : (
-          <div className="space-y-0">
-            {filteredItems.map((item) => (
+          <div>
+            {mediaItems.map((item) => (
               <MediaCard
                 key={item.id}
                 item={item}

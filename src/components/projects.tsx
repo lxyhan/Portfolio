@@ -339,13 +339,13 @@ const ProjectsSection: React.FC = () => {
     <section className="w-full h-full flex flex-col">
       <style dangerouslySetInnerHTML={{ __html: scrollbarStyles }} />
       
-      <div className="flex-shrink-0 mb-3">
-        <h2 className="text-base font-medium text-gray-900 mb-1.5 font-serif">Featured Projects</h2>
-        <p className="text-xs text-gray-600 font-serif">My area of expertise is in backend web programming. I am also highly experienced
+      <div className="flex-shrink-0 mb-2">
+        <h1 className="text-lg font-large text-gray-900 mb-1 font-serif">Featured Projects</h1>
+        <p className="text-sm text-gray-600 font-serif">My area of expertise is in backend web programming. I am also highly experienced
             with modern frontend design and performance optimization tools and protocols.
         </p>
       </div>
-      
+            
       <div className="flex-1 overflow-y-auto pr-1 custom-scrollbar">
         <div className="divide-y divide-gray-100">
           {projects.map((project, i) => (

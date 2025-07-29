@@ -135,7 +135,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
                 ) : (
                   <>
                     {/* Projects component - now gets much more space! */}
-                    <div className="lg:flex-1 lg:min-h-0 lg:mb-4 lg:mt-2">
+                    <div className="lg:flex-1 lg:min-h-0 lg:mb-4 lg:mt-0">
                       <Projects />
                     </div>
                   </>
