@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Play, ExternalLink, Calendar, MapPin } from 'lucide-react';
+import { Play, ExternalLink } from 'lucide-react';
 
 interface MediaItem {
   id: string;
