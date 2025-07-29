@@ -21,9 +21,21 @@ const TechStackSection = () => {
         { icon: "python-plain", name: "Python" },
         { icon: "typescript-plain", name: "TypeScript" },
         { icon: "javascript-plain", name: "JavaScript" },
+        { icon: "r-plain", name: "R" },
+        { icon: "ruby-plain", name: "Ruby" },
         { icon: "java-plain", name: "Java" },
         { icon: "c-plain", name: "C" },
-        { icon: "html5-plain", name: "HTML/CSS" }
+        { icon: "cplusplus-plain", name: "C++" }
+      ]
+    },
+    {
+      title: "ML & Data",
+      items: [
+        { name: "PyTorch" },
+        { name: "Pandas" },
+        { name: "NumPy" },
+        { name: "Jupyter" },
+        { name: "Databricks" }
       ]
     },
     {
@@ -31,38 +43,46 @@ const TechStackSection = () => {
       items: [
         { icon: "react-original", name: "React" },
         { icon: "nextjs-plain", name: "Next.js" },
-        { icon: "vue-plain", name: "Vue.js" },
         { icon: "svelte-plain", name: "Svelte" },
-        { icon: "tailwindcss-plain", name: "Tailwind" }
-      ]
-    },
-    {
-      title: "Design",
-      items: [
-        { icon: "figma-plain", name: "Figma" },
-        { icon: "photoshop-plain", name: "Photoshop" },
-        { icon: "premierepro-plain", name: "Premiere Pro" }
+        { icon: "tailwindcss-plain", name: "Tailwind" },
+        { name: "Three.js" }
       ]
     }
   ];
 
-  const rightColumnCategory: TechCategory = {
-    title: "Backend & Cloud",
-    items: [
-      { icon: "nodejs-plain", name: "Node.js" },
-      { icon: "spring-original", name: "Spring Boot" },
-      { icon: "flask-original", name: "Flask" },
-      { icon: "postgresql-plain", name: "PostgreSQL" },
-      { icon: "mongodb-plain", name: "MongoDB" },
-      { icon: "redis-plain", name: "Redis" },
-      { icon: "docker-plain", name: "Docker" },
-      { icon: "kubernetes-plain", name: "Kubernetes" },
-      { icon: "amazonwebservices-plain", name: "AWS" },
-      { icon: "firebase-plain", name: "Firebase" },
-      { icon: "vercel-plain", name: "Vercel" },
-      { icon: "git-plain", name: "Git" }
-    ]
-  };
+  const rightColumnCategories: TechCategory[] = [
+    {
+      title: "Design & Creative",
+      items: [
+        { icon: "figma-plain", name: "Figma" },
+        { icon: "photoshop-plain", name: "Photoshop" },
+        { icon: "aftereffects-plain", name: "Adobe AE" },
+        { icon: "premierepro-plain", name: "Premiere" }
+      ]
+    },
+    {
+      title: "Backend & Cloud",
+      items: [
+        { icon: "nodejs-plain", name: "Node.js" },
+        { icon: "spring-original", name: "Spring Boot" },
+        { icon: "flask-original", name: "Flask" },
+        { icon: "fastapi-plain", name: "FastAPI" },
+        { icon: "postgresql-plain", name: "PostgreSQL" },
+        { icon: "mongodb-plain", name: "MongoDB" },
+        { icon: "redis-plain", name: "Redis" },
+        { icon: "docker-plain", name: "Docker" },
+        { icon: "amazonwebservices-plain", name: "AWS" }
+      ]
+    },
+    {
+      title: "DevOps",
+      items: [
+        { icon: "git-plain", name: "Git" },
+        { name: "Linear" },
+        { icon: "vercel-plain", name: "Vercel" }
+      ]
+    }
+  ];
 
   const TechPill = ({ tech }: { tech: Technology }) => {
     const isMatched = searchQuery && 
@@ -85,7 +105,7 @@ const TechStackSection = () => {
         {tech.icon && (
           <i className={`devicon-${tech.icon} colored text-xs`} />
         )}
-        <span className="text-xs">{tech.name}</span>
+        <span className="text-xs font-serif">{tech.name}</span>
       </div>
     );
   };
@@ -93,7 +113,7 @@ const TechStackSection = () => {
   return (
     <section className="w-full mt-4">
       <div className="flex items-center justify-between mb-1.5">
-        <h2 className="text-base font-medium text-gray-900">Technical Stack</h2>
+        <h2 className="text-base font-medium text-gray-900 font-serif">Technical Stack</h2>
         <div className="relative">
           <input
             type="text"
@@ -101,7 +121,7 @@ const TechStackSection = () => {
             onChange={(e) => setSearchQuery(e.target.value)}
             placeholder="Search..."
             className="
-              pl-6 pr-2 py-0.5 text-xs
+              pl-6 pr-2 py-0.5 text-xs font-serif
               border border-gray-200 rounded-md
               focus:outline-none focus:ring-1 focus:ring-blue-500
               placeholder:text-gray-400 w-20
@@ -115,7 +135,7 @@ const TechStackSection = () => {
         <div className="space-y-3">
           {leftColumnCategories.map((category) => (
             <div key={category.title} className="space-y-1">
-              <h3 className="text-xs font-medium text-gray-700 flex items-center gap-1">
+              <h3 className="text-xs font-medium text-gray-700 flex items-center gap-1 font-serif">
                 {category.title}
                 <span className="text-xs text-gray-400">({category.items.length})</span>
               </h3>
@@ -127,16 +147,20 @@ const TechStackSection = () => {
             </div>
           ))}
         </div>
-        <div className="space-y-1">
-          <h3 className="text-xs font-medium text-gray-700 flex items-center gap-1">
-            {rightColumnCategory.title}
-            <span className="text-xs text-gray-400">({rightColumnCategory.items.length})</span>
-          </h3>
-          <div className="flex flex-wrap gap-1">
-            {rightColumnCategory.items.map((tech) => (
-              <TechPill key={tech.name} tech={tech} />
-            ))}
-          </div>
+        <div className="space-y-3">
+          {rightColumnCategories.map((category) => (
+            <div key={category.title} className="space-y-1">
+              <h3 className="text-xs font-medium text-gray-700 flex items-center gap-1 font-serif">
+                {category.title}
+                <span className="text-xs text-gray-400">({category.items.length})</span>
+              </h3>
+              <div className="flex flex-wrap gap-1">
+                {category.items.map((tech) => (
+                  <TechPill key={tech.name} tech={tech} />
+                ))}
+              </div>
+            </div>
+          ))}
         </div>
       </div>
     </section>

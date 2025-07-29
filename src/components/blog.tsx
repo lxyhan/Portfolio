@@ -106,7 +106,7 @@ const Blog = ({ posts, onPostClick }: BlogSectionProps) => {
       
       {/* Scrollable Content */}
       <div className="flex-1 overflow-y-auto overflow-x-hidden pr-1 blog-scrollbar">
-        <div className="">
+        <div className="space-y-0">
           {posts.map((post, index) => (
             <BlogCard 
               key={post.slug} 

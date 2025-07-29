@@ -103,20 +103,17 @@ export default function HomeClient({ posts }: HomeClientProps) {
             <div className="lg:h-screen lg:py-6 lg:-my-6 flex-shrink-0">
               <div className="lg:h-full lg:flex lg:flex-col lg:border-r lg:border-gray-100 lg:pr-2">
                 {/* Profile - fixed at top */}
-                <div className="lg:flex-shrink-0">
+                <div className="lg:flex-shrink-0 lg:mb-6">
                   <Profile />
                 </div>
                 
-                {/* Subtle divider */}
-                <div className="hidden lg:block border-t border-gray-100"></div>
-                
                 {/* Blog - scrollable middle section */}
-                <div className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto lg:pr-2 lg:pt-2">
+                <div className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto lg:pr-2 lg:mb-3">
                   <Blog posts={posts} selectedPost={selectedPost} onPostClick={handlePostSelect} />
                 </div>
                 
-                {/* Subtle divider */}
-                <div className="hidden lg:block border-t border-gray-100"></div>
+                {/* Divider */}
+                <div className="hidden lg:block border-t border-gray-200 lg:mb-3"></div>
                 
                 {/* Tech Stack - fixed at bottom */}
                 <div className="lg:flex-shrink-0">
