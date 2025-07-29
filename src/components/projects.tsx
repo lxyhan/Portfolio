@@ -75,7 +75,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => (
               className="w-full h-full object-cover"
               onError={(e) => {
                 const target = e.target as HTMLImageElement;
-                target.src = `https://img.youtube.com/vi/${project.video.includes('youtu.be/') ? project.video.split('youtu.be/')[1] : project.video.split('v=')[1]?.split('&')[0]}/hqdefault.jpg`;
+                target.src = `https://img.youtube.com/vi/${project.video?.includes('youtu.be/') ? project.video.split('youtu.be/')[1] : project.video?.split('v=')[1]?.split('&')[0] ?? ''}/hqdefault.jpg`;
               }}
             />
             <div className="absolute inset-0 bg-black/20 group-hover/video:bg-black/10 transition-colors flex items-center justify-center">
