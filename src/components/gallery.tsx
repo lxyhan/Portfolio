@@ -191,7 +191,7 @@ interface MediaCardProps {
   index: number;
 }
 
-const MediaCard: React.FC<MediaCardProps> = ({ item, onClick, index }) => {
+const MediaCard: React.FC<MediaCardProps> = ({ item, onClick }) => {
   const [isHovered, setIsHovered] = useState(false);
   const thumbnailSrc = item.type === 'video' && item.external 
     ? item.thumbnail || getVideoThumbnail(item.external)
