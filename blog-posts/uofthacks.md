@@ -2,7 +2,7 @@
 title: "Persona: Teaching AI to Actually Give a Damn About Your French Pronunciation"
 description: "How thirty-six hours of sleep deprivation, questionable caffeine choices, and stubborn optimism led to building an AI tutor that can actually see when you're butchering basic vocabulary."
 date: "2025-02-01"
-image: "/uofthacks.jpg"
+image: "/uofthacks.JPG"
 ---
 
 ## The Problem With Digital Owls

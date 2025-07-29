@@ -2,7 +2,7 @@
 title: "The Quiet Revolution of Campus Running"
 description: "How a simple Monday evening gathering at University College became one of campus's most dynamic communities, transforming solitary runs into shared journeys through Toronto's streets."
 date: "2024-09-05"
-image: "/Running.jpg"
+image: "/Running.JPG"
 ---
 ## The Gathering
 
