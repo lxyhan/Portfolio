@@ -1,4 +1,3 @@
-// src/app/home-client.tsx
 'use client';
 
 import React, { useState, useEffect } from 'react';
@@ -12,6 +11,9 @@ import Tech from '../components/tech';
 import Blog from '../components/blog';
 import { BlogPostDisplay, MobileBlogOverlay } from '../components/blog-post-display';
 import type { BlogPost } from '@/types/blog';
+
+// Import your gallery component for the third column
+import Gallery from '../components/gallery';
 
 interface HomeClientProps {
   posts: BlogPost[];
@@ -88,10 +90,10 @@ export default function HomeClient({ posts }: HomeClientProps) {
         `}</style>
 
         <div className="xl:h-screen xl:flex xl:justify-center">
-          <div className="grid grid-cols-1 xl:grid-cols-2 gap-8 xl:gap-12 p-6 xl:p-12 max-w-[1400px] mx-auto w-full">
-            {/* Left Column - Fixed width */}
-            <div className="xl:w-[600px] xl:h-screen xl:py-12 xl:-my-12 flex-shrink-0">
-              <div className="xl:sticky xl:top-12 space-y-8">
+          <div className="grid grid-cols-1 xl:grid-cols-3 gap-8 xl:gap-8 p-6 xl:p-8 max-w-[1800px] mx-auto w-full">
+            {/* Left Column - Profile & Blog */}
+            <div className="xl:w-[500px] xl:h-screen xl:py-8 xl:-my-8 flex-shrink-0">
+              <div className="xl:sticky xl:top-8 space-y-8">
                 <Profile />
                 <div className="xl:min-h-[400px]">
                   <Blog posts={posts} selectedPost={selectedPost} onPostClick={handlePostSelect} />
@@ -99,11 +101,11 @@ export default function HomeClient({ posts }: HomeClientProps) {
               </div>
             </div>
 
-            {/* Right Column - Fixed width, left aligned */}
-            <div className="xl:w-[700px] xl:h-screen xl:overflow-y-auto xl:py-12 xl:-my-12 flex-shrink-0">
+            {/* Middle Column - Projects & Tech or Blog Post */}
+            <div className="xl:w-[550px] xl:h-screen xl:overflow-y-auto xl:py-8 xl:-my-8 flex-shrink-0">
               <div className="space-y-8 xl:pr-4">
                 {selectedPost ? (
-                  <div className="animate-in h-[calc(100vh-12rem)] xl:h-[calc(100vh-8rem)]">
+                  <div className="animate-in h-[calc(100vh-12rem)] xl:h-[calc(100vh-6rem)]">
                     <BlogPostDisplay post={selectedPost} onClose={handlePostClose} />
                   </div>
                 ) : (
@@ -113,6 +115,13 @@ export default function HomeClient({ posts }: HomeClientProps) {
                     {/* <Contributions /> */}
                   </>
                 )}
+              </div>
+            </div>
+
+            {/* Right Column - Gallery */}
+            <div className="xl:w-[500px] xl:h-screen xl:overflow-y-auto xl:py-8 xl:-my-8 flex-shrink-0">
+              <div className="xl:pr-4 h-full">
+                <Gallery />
               </div>
             </div>
           </div>

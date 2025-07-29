@@ -78,7 +78,7 @@ const PersonalHeader = () => {
                 James Han
               </span>
               <span className="block md:inline mt-1 md:mt-0 md:ml-3 font-sans text-sm text-gray-400 tracking-wider uppercase">
-                CompSci & Economics @ UofT
+                CompSci & Stats @ UofT
               </span>
             </h1>
           </div>
