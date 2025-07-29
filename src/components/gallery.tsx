@@ -368,7 +368,7 @@ const Gallery: React.FC = () => {
       type: 'photo',
       src: '/gallery/fairylake.png',
       title: 'Fairy Lake 1.9km Swim',
-      description: 'Open water swimming in January because apparently I enjoy suffering. The water was 4°C and my wetsuit was my lifeline.',
+      description: 'Open water swimming because apparently I enjoy suffering.',
       date: 'January 2025',
       location: 'Newmarket, Ontario',
       camera: 'Canon EOS R6 Mark II',
