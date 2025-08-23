@@ -86,7 +86,7 @@ const PinnedRepositories: React.FC<PinnedRepositoriesProps> = ({
             homepage: repo.homepage
           }));
 
-        console.log(`Found ${originalRepos.length} repositories:`, originalRepos.map(r => `${r.name} (${r.stargazers_count} stars)`));
+        console.log(`Found ${originalRepos.length} repositories:`, originalRepos.map((r: Repository) => `${r.name} (${r.stargazers_count} stars)`));
         setRepos(originalRepos);
         setError(null);
         
