@@ -1,5 +1,5 @@
 import React from 'react';
-import { Download, ExternalLink } from 'lucide-react';
+import { ExternalLink } from 'lucide-react';
 
 export default function Resume() {
   return (
