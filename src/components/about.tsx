@@ -62,7 +62,7 @@ export default function About() {
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
-                <span>1st at <a href="#" className="text-gray-900 underline decoration-gray-400 underline-offset-2 hover:decoration-gray-600">Google x Hack the Future</a> with Revo, reduced return fraud by 57%</span>
+                <span>1st at <a href="#" className="text-gray-900 underline decoration-gray-400 underline-offset-2 hover:decoration-gray-600">Google x Hack the Future</a> with Revo, a return fraud detection system</span>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>

@@ -205,7 +205,6 @@ const ProjectsSection: React.FC = () => {
       "githubUsername": "lxyhan",
       "video": "https://youtu.be/i0L6Ytlljoc",
       "devpost": "https://dorahacks.io/buidl/21736",
-      "award": "1st Place",
       "technologies": [
         { "icon": "react-plain", "name": "React" },
         { "icon": "tensorflow-original", "name": "TensorFlow" },
@@ -221,7 +220,6 @@ const ProjectsSection: React.FC = () => {
       "githubUsername": "lxyhan",
       "video": "https://youtu.be/IwHUTAiYlBk",
       "devpost": "https://devpost.com/software/revo",
-      "award": "1st Place",
       "technologies": [
         { "icon": "nextjs-plain", "name": "Next.js" },
         { "icon": "python-plain", "name": "Python" },
@@ -237,7 +235,6 @@ const ProjectsSection: React.FC = () => {
       "githubUsername": "qiuethan",
       "video": "https://youtu.be/PGPgzu2f-0Y",
       "devpost": "https://devpost.com/software/polaris-vlp1wm",
-      "award": "Best Game Hack",
       "technologies": [
         { "icon": "threejs-original", "name": "Three.js" },
         { "icon": "opencv-original", "name": "OpenCV" },
@@ -253,7 +250,6 @@ const ProjectsSection: React.FC = () => {
       "githubUsername": "lxyhan",
       "devpost": "https://devpost.com/software/close-to-home",
       "image": "/projects/newhacks-thumbnail.png",
-      "award": "DataBricks & 1st in Track",
       "technologies": [
         { "icon": "svelte-plain", "name": "Svelte" },
         { "icon": "python-plain", "name": "Python" },
@@ -284,7 +280,7 @@ const ProjectsSection: React.FC = () => {
       "githubUsername": "pyta-uoft",
       "image": "/projects/pythonta-thumbnail.png",
       "website": "https://www.cs.toronto.edu/~david/pyta/",
-      "openSource": true,
+      "openSource": false,
       "technologies": [
         { "icon": "python-plain", "name": "Python" },
         { "icon": "javascript-plain", "name": "JavaScript" },
@@ -296,7 +292,7 @@ const ProjectsSection: React.FC = () => {
     {
       "title": "Brampton Tennis Queue",
       "description": "Municipal Deployment: City of Brampton's recreation team to launch this queuing app in local courts by Summer 2025! Real-world government contract.",
-      "openSource": true,
+      "openSource": false,
       "image": '/projects/btq-thumbnail.HEIC',
       "technologies": [
         { "icon": "nextjs-plain", "name": "Next.js" },
@@ -323,7 +319,7 @@ const ProjectsSection: React.FC = () => {
       "description": "E-commerce Platform: Advanced payment processing and real-time inventory management using modern web technologies with full-stack architecture.",
       "github": "https://github.com/lxyhan/markyt-development",
       "image": '/projects/markyt-thumbnail.png',
-      "openSource": true,
+      "openSource": false,
       "githubUsername": "lxyhan",
       "technologies": [
         { "icon": "svelte-plain", "name": "Svelte" },

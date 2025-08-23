@@ -8,6 +8,7 @@ import Projects from '../components/projects';
 import Tech from '../components/tech';
 import Blog from '../components/blog';
 import About from '../components/about';
+import Resume from '../components/resume';
 import MobileNav from '../components/mobile-nav';
 import { BlogPostDisplay, MobileBlogOverlay } from '../components/blog-post-display';
 import type { BlogPost } from '@/types/blog';
@@ -48,11 +49,12 @@ export default function HomeClient({ posts }: HomeClientProps) {
   };
 
   const sections = [
-    { id: 'about', label: 'About' },
-    { id: 'projects', label: 'Projects' },
+    { id: 'about', label: 'About Me' },
+    { id: 'projects', label: 'Recent Projects' },
     { id: 'writing', label: 'Writing' },
-    { id: 'tech', label: 'Tech' },
-    { id: 'gallery', label: 'Gallery' }
+    { id: 'tech', label: 'Tech Stack' },
+    { id: 'gallery', label: 'Camera Roll' },
+    { id: 'resume', label: 'Resume / CV' }
   ];
 
   const renderContent = () => {
@@ -71,6 +73,8 @@ export default function HomeClient({ posts }: HomeClientProps) {
         return <Tech />;
       case 'gallery':
         return <Gallery />;
+      case 'resume':
+        return <Resume />;
       default:
         return null;
     }
