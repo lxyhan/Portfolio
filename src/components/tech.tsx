@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Search } from 'lucide-react';
+import PinnedRepositories from './pinned-repositories';
 
 interface Technology {
   name: string;
@@ -131,7 +132,9 @@ const TechStackSection = () => {
         </div>
       </div>
       
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-3 bg-white rounded p-2.5 shadow-sm border border-gray-100">
+      <div className="bg-white rounded p-2.5 shadow-sm border border-gray-100 space-y-4">
+        {/* Tech Stack Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
         <div className="space-y-3">
           {leftColumnCategories.map((category) => (
             <div key={category.title} className="space-y-1">
@@ -162,6 +165,10 @@ const TechStackSection = () => {
             </div>
           ))}
         </div>
+        </div>
+        
+        {/* Popular Repositories */}
+        <PinnedRepositories username="lxyhan" maxRepos={4} />
       </div>
     </section>
   );

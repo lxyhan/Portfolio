@@ -57,11 +57,18 @@ export default {
   			md: 'calc(var(--radius) - 2px)',
   			sm: 'calc(var(--radius) - 4px)'
   		},
-  		// Add serif and mono fonts for the academic design
-  		fontFamily: {
-  			serif: ['Georgia', 'Cambria', '"Times New Roman"', 'Times', 'serif'],
-  			mono: ['Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace'],
-  		},
+  				// Computer Modern font for academic design
+		fontFamily: {
+			sans: ['Computer Modern', 'Latin Modern Roman', 'serif'],
+			serif: ['Computer Modern', 'Latin Modern Roman', 'serif'],
+			mono: ['Computer Modern Typewriter', 'Latin Modern Mono', 'Menlo', 'Monaco', 'Consolas', '"Liberation Mono"', '"Courier New"', 'monospace'],
+		},
+		// Academic spacing
+		spacing: {
+			'academic': '2rem',
+			'academic-lg': '3rem',
+			'academic-xl': '4rem',
+		},
   	}
   },
   plugins: [

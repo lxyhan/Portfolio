@@ -7,12 +7,11 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import Profile from '../components/profile';
 import Projects from '../components/projects';
 import Tech from '../components/tech';
-// import Contributions from '../components/contributions';
 import Blog from '../components/blog';
+import About from '../components/about';
+import MobileNav from '../components/mobile-nav';
 import { BlogPostDisplay, MobileBlogOverlay } from '../components/blog-post-display';
 import type { BlogPost } from '@/types/blog';
-
-// Import your gallery component for the third column
 import Gallery from '../components/gallery';
 
 interface HomeClientProps {
@@ -23,6 +22,8 @@ export default function HomeClient({ posts }: HomeClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [activeSection, setActiveSection] = useState('about');
+  const [isLoading, setIsLoading] = useState(false);
 
   // Handle URL params on mount and when they change
   useEffect(() => {
@@ -47,105 +48,187 @@ export default function HomeClient({ posts }: HomeClientProps) {
     router.push('/', { scroll: false });
   };
 
+  const sections = [
+    { id: 'about', label: 'About' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'writing', label: 'Writing' },
+    { id: 'tech', label: 'Tech' },
+    { id: 'gallery', label: 'Gallery' }
+  ];
+
+  const renderContent = () => {
+    if (selectedPost) {
+      return <BlogPostDisplay post={selectedPost} onClose={handlePostClose} />;
+    }
+
+    switch (activeSection) {
+      case 'about':
+        return <About />;
+      case 'projects':
+        return <Projects />;
+      case 'writing':
+        return <Blog posts={posts} selectedPost={selectedPost} onPostClick={handlePostSelect} />;
+      case 'tech':
+        return <Tech />;
+      case 'gallery':
+        return <Gallery />;
+      default:
+        return null;
+    }
+  };
+
   return (
     <>
-      <main className="min-h-screen bg-white lg:h-screen lg:overflow-hidden">
+      <main className="min-h-screen bg-white">
         <style jsx global>{`
-          @keyframes fadeIn {
-            from {
-              opacity: 0;
-              transform: translateY(10px);
-            }
-            to {
-              opacity: 1;
-              transform: translateY(0);
-            }
+          @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+          
+          body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
           }
 
-          ::-webkit-scrollbar {
-            width: 4px;
-          }
-
-          ::-webkit-scrollbar-track {
-            background: transparent;
-          }
-
-          ::-webkit-scrollbar-thumb {
-            background: rgba(0, 0, 0, 0.2);
-            border-radius: 2px;
-          }
-
-          ::-webkit-scrollbar-thumb:hover {
-            background: rgba(0, 0, 0, 0.3);
-          }
-
-          * {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(0, 0, 0, 0.2) transparent;
-          }
-
-          .animate-in {
-            animation: fadeIn 0.5s ease-out forwards;
-          }
-
-          /* Single column gallery */
-          .gallery-single-column img {
-            width: 100% !important;
-            margin-bottom: 0.75rem;
+          .font-serif {
+            font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
           }
         `}</style>
 
-        <div className="lg:h-screen lg:flex lg:justify-center">
-          {/* Container with uniform padding */}
-          <div className="grid grid-cols-1 gap-4 p-6 lg:gap-2 lg:p-6 max-w-none mx-auto w-full lg:grid-cols-[420px_1fr_280px] lg:grid-rows-1">
-            
-            {/* Left Column - Profile, Blog (scrollable), Tech Stack */}
-            <div className="lg:h-screen lg:py-6 lg:-my-6 flex-shrink-0">
-              <div className="lg:h-full lg:flex lg:flex-col lg:border-r lg:border-gray-100 lg:pr-2">
-                {/* Profile - fixed at top */}
-                <div className="lg:flex-shrink-0 lg:mb-6">
-                  <Profile />
-                </div>
-                
-                {/* Blog - scrollable middle section */}
-                <div className="lg:flex-1 lg:min-h-0 lg:overflow-y-auto lg:pr-2 lg:mb-3">
-                  <Blog posts={posts} selectedPost={selectedPost} onPostClick={handlePostSelect} />
-                </div>
-                
-                {/* Divider */}
-                <div className="hidden lg:block border-t border-gray-200 lg:mb-3"></div>
-                
-                {/* Tech Stack - fixed at bottom */}
-                <div className="lg:flex-shrink-0">
-                  <Tech />
+        {/* Mobile Navigation */}
+        <MobileNav 
+          activeSection={activeSection} 
+          onSectionChange={(section) => {
+            setIsLoading(true);
+            setTimeout(() => {
+              setActiveSection(section);
+              setIsLoading(false);
+            }, 300);
+          }}
+          sections={sections}
+        />
+
+        {/* Desktop Layout */}
+        <div className="hidden lg:block">
+          <div className="max-w-5xl mx-auto px-8 lg:px-20 py-16 lg:py-24">
+            <div className="flex">
+              
+              {/* Desktop sidebar */}
+              <div className="w-64 flex-shrink-0">
+                <div className="sticky top-8">
+                  {/* Header with photo */}
+                  <div className="mb-8">
+                    <div className="flex gap-3 items-center mb-4">
+                      <div className="w-16 h-16 bg-gray-50 rounded overflow-hidden flex-shrink-0">
+                        <img
+                          src="/profile-photo.jpg"
+                          alt="James Han"
+                          className="object-cover w-full h-full"
+                        />
+                      </div>
+                      
+                      <div className="flex-1 min-w-0">
+                        <h1 className="font-serif text-lg font-medium text-gray-900 leading-tight">
+                          James Han
+                        </h1>
+                        <div className="text-sm text-gray-500 leading-tight font-serif">
+                          CompSci & Stats @ UofT
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Bio */}
+                    <p className="text-sm text-gray-600 leading-relaxed font-serif">
+                      Building at the intersection of <span className="italic">machine learning</span> and <span className="italic">product design</span>. 
+                      Currently studying computer science and statistics at UofT, with a focus on creating 
+                      thoughtful digital experiences.
+                    </p>
+                  </div>
+
+                  {/* Navigation */}
+                  <nav className="mb-8">
+                    <div className="space-y-2">
+                      {sections.map((section) => (
+                        <div key={section.id}>
+                          <button
+                            onClick={() => {
+                              setIsLoading(true);
+                              setTimeout(() => {
+                                setActiveSection(section.id);
+                                setIsLoading(false);
+                              }, 300);
+                            }}
+                            className={`text-left text-sm font-serif transition-colors ${
+                              activeSection === section.id
+                                ? 'text-gray-900 font-medium'
+                                : 'text-gray-600 hover:text-gray-900'
+                            }`}
+                          >
+                            {section.label}
+                          </button>
+                        </div>
+                      ))}
+                    </div>
+                  </nav>
+
+                  {/* Contact */}
+                  <div className="space-y-2">
+                    <div className="text-xs text-gray-400 font-serif">
+                      jameshan.cs@gmail.com
+                    </div>
+                    <div className="flex gap-3 items-center">
+                      <a 
+                        href="https://linkedin.com/in/jameshan27" 
+                        className="text-xs font-serif text-gray-600 hover:text-gray-800 hover:underline"
+                      >
+                        LinkedIn
+                      </a>
+                      <a 
+                        href="https://github.com/lxyhan" 
+                        className="text-xs font-serif text-gray-600 hover:text-gray-800 hover:underline"
+                      >
+                        GitHub
+                      </a>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </div>
 
-            {/* Middle Column - Projects & Tech or Blog Post (gets most space) */}
-            <div className="lg:h-screen lg:py-6 lg:-my-6 flex-shrink-0 lg:min-w-0 lg:overflow-hidden">
-              <div className="lg:h-full lg:flex lg:flex-col lg:px-2 lg:border-r lg:border-gray-100">
-                {selectedPost ? (
-                  <div className="animate-in h-[calc(100vh-12rem)] lg:h-[calc(100vh-6rem)]">
-                    <BlogPostDisplay post={selectedPost} onClose={handlePostClose} />
+              {/* Desktop Main Content Area */}
+              <div className="flex-1 ml-12">
+                {isLoading ? (
+                  <div className="flex items-center justify-center min-h-96">
+                    <div className="flex flex-col items-center space-y-4">
+                      <div className="flex space-x-2">
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                        <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                      </div>
+                      <span className="text-sm italic text-gray-600 font-serif">Loading</span>
+                    </div>
                   </div>
                 ) : (
-                  <>
-                    {/* Projects component - now gets much more space! */}
-                    <div className="lg:flex-1 lg:min-h-0 lg:mb-4 lg:mt-0">
-                      <Projects />
-                    </div>
-                  </>
+                  renderContent()
                 )}
               </div>
             </div>
+          </div>
+        </div>
 
-            {/* Right Column - Gallery (narrow, single column) */}
-            <div className="lg:h-screen lg:overflow-y-auto lg:py-6 lg:-my-6 flex-shrink-0">
-              <div className="h-full lg:gallery-single-column lg:pl-2">
-                <Gallery />
+        {/* Mobile Content Area */}
+        <div className="lg:hidden">
+          <div className="px-4 py-6">
+            {isLoading ? (
+              <div className="flex items-center justify-center min-h-96">
+                <div className="flex flex-col items-center space-y-4">
+                  <div className="flex space-x-2">
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
+                    <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
+                  </div>
+                  <span className="text-sm italic text-gray-600 font-serif">Loading</span>
+                </div>
               </div>
-            </div>
+            ) : (
+              renderContent()
+            )}
           </div>
         </div>
 

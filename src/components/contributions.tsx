@@ -73,10 +73,11 @@ const ContributionGraph: React.FC = () => {
           .contributionCalendar.weeks
           .flatMap(week => week.contributionDays);
           
-        const fourMonthsAgo = new Date();
-        fourMonthsAgo.setMonth(fourMonthsAgo.getMonth() - 7);
+        // Show the full year instead of just 7 months
+        const oneYearAgo = new Date();
+        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
         const filteredContributions = contributionDays.filter(
-          day => new Date(day.date) >= fourMonthsAgo
+          day => new Date(day.date) >= oneYearAgo
         );
           
         setContributions(filteredContributions);
@@ -93,10 +94,10 @@ const ContributionGraph: React.FC = () => {
 
   const getContributionColor = (count: number): string => {
     if (count === 0) return 'bg-gray-100';
-    if (count <= 3) return 'bg-green-200';
-    if (count <= 6) return 'bg-green-400';
-    if (count <= 9) return 'bg-green-600';
-    return 'bg-green-800';
+    if (count <= 2) return 'bg-green-200';
+    if (count <= 5) return 'bg-green-300';
+    if (count <= 10) return 'bg-green-500';
+    return 'bg-green-700';
   };
 
   const formatDate = (date: string): string => {
@@ -107,24 +108,30 @@ const ContributionGraph: React.FC = () => {
     });
   };
 
-  if (loading) return <div className="w-full animate-pulse h-32 bg-gray-100" />;
-  if (error) return <div className="w-full text-red-500 text-sm">Failed to load contribution data</div>;
+  if (loading) return <div className="w-full animate-pulse h-24 bg-gray-50 rounded" />;
+  if (error) return <div className="w-full text-xs text-gray-500">Unable to load GitHub activity</div>;
 
   const weeks: ContributionDay[][] = [];
   for (let i = 0; i < contributions.length; i += 7) {
     weeks.push(contributions.slice(i, i + 7));
   }
 
+  const totalContributions = contributions.reduce((sum, day) => sum + day.contributionCount, 0);
+
   return (
-    <div className="w-full">
-      <div className="w-full overflow-x-auto px-0.5 py-0.5">
-        <div className="w-full grid grid-flow-col auto-cols-fr gap-1">
+    <div className="w-full space-y-2">
+      <div className="text-xs text-gray-600 font-serif">
+        {totalContributions} contributions in the last year
+      </div>
+      
+      <div className="w-full">
+        <div className="grid gap-[1px]" style={{ gridTemplateColumns: `repeat(${weeks.length}, 1fr)` }}>
           {weeks.map((week, weekIndex) => (
-            <div key={weekIndex} className="flex flex-col gap-1">
+            <div key={weekIndex} className="grid grid-rows-7 gap-[1px]">
               {week.map((day, dayIndex) => (
                 <div
                   key={`${weekIndex}-${dayIndex}`}
-                  className={`w-3 h-3 rounded-sm outline outline-1 outline-gray-200 ${getContributionColor(day.contributionCount)}`}
+                  className={`w-full aspect-square rounded-[1px] ${getContributionColor(day.contributionCount)} transition-colors cursor-pointer`}
                   title={`${day.contributionCount} contributions on ${formatDate(day.date)}`}
                 />
               ))}
@@ -132,14 +139,21 @@ const ContributionGraph: React.FC = () => {
           ))}
         </div>
       </div>
-      <div className="mt-2 flex items-center text-xs text-gray-600 space-x-2">
-        <span>Less</span>
-        <div className="w-3 h-3 bg-gray-100 rounded-sm outline outline-1 outline-gray-200" />
-        <div className="w-3 h-3 bg-green-200 rounded-sm outline outline-1 outline-gray-200" />
-        <div className="w-3 h-3 bg-green-400 rounded-sm outline outline-1 outline-gray-200" />
-        <div className="w-3 h-3 bg-green-600 rounded-sm outline outline-1 outline-gray-200" />
-        <div className="w-3 h-3 bg-green-800 rounded-sm outline outline-1 outline-gray-200" />
-        <span>More</span>
+      
+      <div className="flex items-center justify-between text-[10px] text-gray-400 font-mono">
+        <span>1 year ago</span>
+        <div className="flex items-center gap-1">
+          <span>Less</span>
+          <div className="flex gap-[1px]">
+            <div className="w-2.5 h-2.5 bg-gray-100 rounded-[1px]" />
+            <div className="w-2.5 h-2.5 bg-green-200 rounded-[1px]" />
+            <div className="w-2.5 h-2.5 bg-green-300 rounded-[1px]" />
+            <div className="w-2.5 h-2.5 bg-green-500 rounded-[1px]" />
+            <div className="w-2.5 h-2.5 bg-green-700 rounded-[1px]" />
+          </div>
+          <span>More</span>
+        </div>
+        <span>Today</span>
       </div>
     </div>
   );
