@@ -124,17 +124,17 @@ export default function HomeClient({ posts }: HomeClientProps) {
                       </div>
                       
                       <div className="flex-1 min-w-0">
-                        <h1 className="font-serif text-lg font-medium text-gray-900 leading-tight">
+                        <h1 className="font-serif text-xl font-medium text-gray-900 leading-tight">
                           James Han
                         </h1>
-                        <div className="text-sm text-gray-500 leading-tight font-serif">
+                        <div className="text-base text-gray-500 leading-tight font-serif">
                           Compsci & Stats @ UofT
                         </div>
                       </div>
                     </div>
 
                     {/* Bio */}
-                    <p className="text-sm text-gray-600 leading-relaxed font-serif">
+                    <p className="text-base text-gray-600 leading-relaxed font-serif">
                       Building at the intersection of <span className="italic">machine learning</span> and <span className="italic">product design</span>. 
                       Currently studying computer science and statistics at UofT, with a focus on creating 
                       thoughtful digital experiences.
@@ -154,7 +154,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
                                 setIsLoading(false);
                               }, 200);
                             }}
-                            className={`text-left text-sm font-serif transition-colors ${
+                            className={`text-left text-base font-serif transition-colors ${
                               activeSection === section.id
                                 ? 'text-gray-900 font-medium'
                                 : 'text-gray-600 hover:text-gray-900'
@@ -169,19 +169,19 @@ export default function HomeClient({ posts }: HomeClientProps) {
 
                   {/* Contact */}
                   <div className="space-y-2">
-                    <div className="text-xs text-gray-400 font-serif">
+                    <div className="text-sm text-gray-400 font-serif">
                       jameshan.cs@gmail.com
                     </div>
                     <div className="flex gap-3 items-center">
                       <a 
                         href="https://linkedin.com/in/jameshan27" 
-                        className="text-xs font-serif text-gray-600 hover:text-gray-800 hover:underline"
+                        className="text-sm font-serif text-gray-600 hover:text-gray-800 hover:underline"
                       >
                         LinkedIn
                       </a>
                       <a 
                         href="https://github.com/lxyhan" 
-                        className="text-xs font-serif text-gray-600 hover:text-gray-800 hover:underline"
+                        className="text-sm font-serif text-gray-600 hover:text-gray-800 hover:underline"
                       >
                         GitHub
                       </a>
@@ -217,7 +217,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.1s'}}></div>
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}}></div>
                       </div>
-                      <span className="text-sm italic text-gray-600 font-serif">Loading</span>
+                      <span className="text-base italic text-gray-600 font-serif">Loading</span>
                     </div>
                   </div>
                 )}
