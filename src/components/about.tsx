@@ -19,7 +19,7 @@ export default function About() {
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
-                <span>Building <a href="#" className="text-gray-900 underline decoration-gray-400 underline-offset-2 hover:decoration-gray-600">MarkUs & PythonTA</a> with Prof. David Liu — educational tools powering UofT&apos;s CS program (used by 3300+ students across CSC108, CSC110, CSC111, CSC148)</span>
+                <span>Building <a href="#" className="text-gray-900 underline decoration-gray-400 underline-offset-2 hover:decoration-gray-600">MarkUs & PythonTA</a> with Prof. David Liu — open-source tools powering UofT and Waterloo&apos;s CS departmentts (used by 7000+ students across CSC108, CSC110, CSC111, CSC148)</span>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
