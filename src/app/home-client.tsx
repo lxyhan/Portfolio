@@ -4,7 +4,6 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 
 // Import your existing components
-import Profile from '../components/profile';
 import Projects from '../components/projects';
 import Tech from '../components/tech';
 import Blog from '../components/blog';
@@ -100,7 +99,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
             setTimeout(() => {
               setActiveSection(section);
               setIsLoading(false);
-            }, 300);
+            }, 200);
           }}
           sections={sections}
         />
@@ -129,7 +128,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
                           James Han
                         </h1>
                         <div className="text-sm text-gray-500 leading-tight font-serif">
-                          CompSci & Stats @ UofT
+                          Compsci & Stats @ UofT
                         </div>
                       </div>
                     </div>
@@ -153,7 +152,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
                               setTimeout(() => {
                                 setActiveSection(section.id);
                                 setIsLoading(false);
-                              }, 300);
+                              }, 200);
                             }}
                             className={`text-left text-sm font-serif transition-colors ${
                               activeSection === section.id
@@ -192,9 +191,26 @@ export default function HomeClient({ posts }: HomeClientProps) {
               </div>
 
               {/* Desktop Main Content Area */}
-              <div className="flex-1 ml-12">
-                {isLoading ? (
-                  <div className="flex items-center justify-center min-h-96">
+              <div className="flex-1 ml-12 relative">
+                <div 
+                  className={`transition-opacity duration-500 ease-in-out ${
+                    isLoading ? 'opacity-0' : 'opacity-100'
+                  }`}
+                  style={{
+                    transform: isLoading ? 'translateY(10px)' : 'translateY(0)',
+                    transition: 'opacity 0.5s ease-in-out, transform 0.5s ease-in-out'
+                  }}
+                >
+                  {!isLoading && renderContent()}
+                </div>
+                
+                {isLoading && (
+                  <div 
+                    className="absolute inset-0 flex items-center justify-center min-h-96 transition-opacity duration-300 ease-in-out"
+                    style={{
+                      opacity: isLoading ? 1 : 0
+                    }}
+                  >
                     <div className="flex flex-col items-center space-y-4">
                       <div className="flex space-x-2">
                         <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
@@ -204,8 +220,6 @@ export default function HomeClient({ posts }: HomeClientProps) {
                       <span className="text-sm italic text-gray-600 font-serif">Loading</span>
                     </div>
                   </div>
-                ) : (
-                  renderContent()
                 )}
               </div>
             </div>
@@ -214,9 +228,26 @@ export default function HomeClient({ posts }: HomeClientProps) {
 
         {/* Mobile Content Area */}
         <div className="lg:hidden">
-          <div className="px-4 py-6">
-            {isLoading ? (
-              <div className="flex items-center justify-center min-h-96">
+          <div className="px-4 py-6 relative">
+            <div 
+              className={`transition-opacity duration-500 ease-in-out ${
+                isLoading ? 'opacity-0' : 'opacity-100'
+              }`}
+              style={{
+                transform: isLoading ? 'translateY(10px)' : 'translateY(0)',
+                transition: 'opacity 0.5s ease-in-out, transform 0.5s ease-in-out'
+              }}
+            >
+              {!isLoading && renderContent()}
+            </div>
+            
+            {isLoading && (
+              <div 
+                className="absolute inset-0 flex items-center justify-center min-h-96 transition-opacity duration-300 ease-in-out"
+                style={{
+                  opacity: isLoading ? 1 : 0
+                }}
+              >
                 <div className="flex flex-col items-center space-y-4">
                   <div className="flex space-x-2">
                     <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
@@ -226,8 +257,6 @@ export default function HomeClient({ posts }: HomeClientProps) {
                   <span className="text-sm italic text-gray-600 font-serif">Loading</span>
                 </div>
               </div>
-            ) : (
-              renderContent()
             )}
           </div>
         </div>

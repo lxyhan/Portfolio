@@ -5,6 +5,37 @@ interface GitHubActivityProps {
   username?: string;
 }
 
+interface Repository {
+  stargazerCount: number;
+  primaryLanguage: {
+    name: string;
+  } | null;
+  updatedAt: string;
+}
+
+interface User {
+  repositories: {
+    totalCount: number;
+    nodes: Repository[];
+  };
+  contributionsCollection: {
+    contributionCalendar: {
+      totalContributions: number;
+    };
+  };
+}
+
+interface GraphQLResponse {
+  data: {
+    user: User;
+  };
+  errors?: Array<{
+    message: string;
+    type: string;
+    path: string[];
+  }>;
+}
+
 const GitHubActivitySummary: React.FC<GitHubActivityProps> = ({ 
   username = 'lxyhan'
 }) => {
@@ -18,57 +49,109 @@ const GitHubActivitySummary: React.FC<GitHubActivityProps> = ({
 
   useEffect(() => {
     const fetchGitHubActivity = async () => {
+      const query = `
+        query {
+          user(login: "${username}") {
+            repositories(first: 100, ownerAffiliations: OWNER, orderBy: {field: STARGAZERS, direction: DESC}) {
+              totalCount
+              nodes {
+                stargazerCount
+                primaryLanguage {
+                  name
+                }
+                updatedAt
+              }
+            }
+            contributionsCollection {
+              contributionCalendar {
+                totalContributions
+              }
+            }
+          }
+        }
+      `;
+
       try {
         setLoading(true);
         
-        // Fetch user data and repositories
-        console.log(`Fetching GitHub data for ${username}...`);
-        const userResponse = await fetch(`https://api.github.com/users/${username}`);
-        const reposResponse = await fetch(`https://api.github.com/users/${username}/repos?per_page=100&type=public`);
-        
-        console.log('User response status:', userResponse.status);
-        console.log('Repos response status:', reposResponse.status);
-        
-        if (!userResponse.ok || !reposResponse.ok) {
-          throw new Error('Failed to fetch GitHub data');
+        const token = process.env.NEXT_PUBLIC_GITHUB_TOKEN;
+        if (!token) {
+          console.error('GitHub token not found in environment variables');
+          throw new Error('GitHub token not found');
         }
         
-        const userData = await userResponse.json();
-        const reposData = await reposResponse.json();
+        console.log('Fetching GitHub data via GraphQL for:', username);
+        
+        const response = await fetch('https://api.github.com/graphql', {
+          method: 'POST',
+          headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ query }),
+        });
+
+        console.log('GraphQL Response status:', response.status);
+
+        if (!response.ok) {
+          const errorText = await response.text();
+          console.error('GraphQL Response error:', errorText);
+          throw new Error(`Network response was not ok: ${response.status}`);
+        }
+
+        const data: GraphQLResponse = await response.json();
+        console.log('GraphQL Response data:', data);
+        
+        if (data.errors) {
+          console.error('GraphQL errors:', data.errors);
+          throw new Error(`GraphQL errors: ${JSON.stringify(data.errors)}`);
+        }
+        
+        if (!data.data?.user) {
+          console.error('User not found in GraphQL response');
+          throw new Error('User not found');
+        }
+
+        const user = data.data.user;
+        const repositories = user.repositories.nodes;
+        
+        console.log('Found repositories:', repositories.length);
+        console.log('Total contributions:', user.contributionsCollection.contributionCalendar.totalContributions);
         
         // Calculate total stars
-        const totalStars = reposData.reduce((sum: number, repo: { stargazers_count: number }) => sum + repo.stargazers_count, 0);
+        const totalStars = repositories.reduce((sum, repo) => sum + repo.stargazerCount, 0);
         
         // Find most used language
         const languageCount: { [key: string]: number } = {};
-        reposData.forEach((repo: { language: string | null }) => {
-          if (repo.language) {
-            languageCount[repo.language] = (languageCount[repo.language] || 0) + 1;
+        repositories.forEach((repo) => {
+          if (repo.primaryLanguage?.name) {
+            const lang = repo.primaryLanguage.name;
+            languageCount[lang] = (languageCount[lang] || 0) + 1;
           }
         });
         
-        const topLanguage = Object.keys(languageCount).reduce((a, b) => 
-          languageCount[a] > languageCount[b] ? a : b, 'JavaScript'
-        );
+        const topLanguage = Object.keys(languageCount).length > 0 
+          ? Object.keys(languageCount).reduce((a, b) => 
+              languageCount[a] > languageCount[b] ? a : b
+            )
+          : 'TypeScript';
         
-        // Calculate recent activity (repositories created/updated in the last year)
-        const oneYearAgo = new Date();
-        oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
-        
-        const recentActivity = reposData.filter((repo: { updated_at: string }) => {
-          const updatedDate = new Date(repo.updated_at);
-          return updatedDate >= oneYearAgo;
-        }).length;
+        console.log('Calculated stats:', {
+          totalContributions: user.contributionsCollection.contributionCalendar.totalContributions,
+          totalStars,
+          publicRepos: user.repositories.totalCount,
+          topLanguage
+        });
         
         setActivityData({
-          totalContributions: recentActivity * 10, // Rough estimate
+          totalContributions: user.contributionsCollection.contributionCalendar.totalContributions,
           totalStars,
-          publicRepos: userData.public_repos,
+          publicRepos: user.repositories.totalCount,
           topLanguage
         });
         
       } catch (err) {
-        console.error('GitHub API error:', err);
+        console.error('GitHub GraphQL API error:', err);
         // Fallback data - using realistic numbers
         setActivityData({
           totalContributions: 847,

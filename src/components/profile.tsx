@@ -65,7 +65,7 @@ const PersonalHeader = () => {
               James Han
             </h1>
             <div className="text-sm text-gray-500 leading-tight font-serif">
-              CompSci & Stats @ UofT
+              Compsci & Stats @ UofT
             </div>
             <div className="text-xs text-gray-400 leading-tight font-serif">
               jameshan.cs@gmail.com

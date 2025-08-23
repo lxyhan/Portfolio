@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, Video, Image, ExternalLink } from 'lucide-react';
+import { Github, Video, Image, ExternalLink, Award, Code } from 'lucide-react';
 
 interface Technology {
   icon: string;
@@ -42,14 +42,32 @@ const ProjectCard: React.FC<ProjectCardProps> = ({ project }) => (
     <div className="flex gap-3">
       {/* Left side - Video/Media (35% width) */}
       <div className="flex-shrink-0 w-[35%] max-w-[140px] relative">
-
+        {/* Award ribbon */}
+        {project.award && (
+          <div className="absolute -top-1 -left-1 z-10">
+            <div className="bg-gradient-to-r from-yellow-400 to-yellow-500 text-yellow-900 px-2 py-0.5 text-[9px] font-bold rounded-br-lg rounded-tl-lg shadow-sm flex items-center gap-1">
+              <Award className="w-2 h-2" />
+              {project.award}
+            </div>
+          </div>
+        )}
+        
+        {/* Open Source ribbon */}
+        {project.openSource && !project.award && (
+          <div className="absolute -top-1 -left-1 z-10">
+            <div className="bg-gradient-to-r from-blue-500 to-blue-600 text-white px-2 py-0.5 text-[9px] font-bold rounded-br-lg rounded-tl-lg shadow-sm flex items-center gap-1">
+              <Code className="w-2 h-2" />
+              Open Source
+            </div>
+          </div>
+        )}
         
         {project.video ? (
           <a
             href={project.video}
             target="_blank"
             rel="noopener noreferrer"
-            className="block w-full aspect-video bg-gray-900 rounded-lg overflow-hidden group/video hover:scale-[1.02] transition-transform cursor-pointer relative border border-gray-300"
+            className="block w-full aspect-video bg-gray-900 rounded-lg overflow-hidden group/video hover:scale-[1.02] transition-transform cursor-pointer relative"
           >
             <img 
               src={`https://img.youtube.com/vi/${project.video.includes('youtu.be/') ? project.video.split('youtu.be/')[1] : project.video.split('v=')[1]?.split('&')[0]}/maxresdefault.jpg`}
