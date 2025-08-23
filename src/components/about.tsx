@@ -70,7 +70,7 @@ export default function About() {
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
-                <span>Finalist at <a href="#" className="text-gray-900 underline decoration-gray-400 underline-offset-2 hover:decoration-gray-600">AWS Cloud Case Competition</a></span>
+                <span>Finalist (top 7 teams) at <a href="#" className="text-gray-900 underline decoration-gray-400 underline-offset-2 hover:decoration-gray-600">AWS Cloud Case Competition</a></span>
               </div>
             </div>
           </div>
