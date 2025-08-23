@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Github, GitBranch, Star, Users, Calendar, TrendingUp } from 'lucide-react';
+import { Github, GitBranch, Star, TrendingUp } from 'lucide-react';
 
 interface GitHubProfile {
   login: string;
@@ -59,7 +59,7 @@ const GitHubStats: React.FC<GitHubStatsProps> = ({
         const reposData = await reposResponse.json();
         
         // Filter out forked repos and get only original repos
-        const originalRepos = reposData.filter((repo: any) => !repo.fork);
+        const originalRepos = reposData.filter((repo: { fork: boolean }) => !repo.fork);
         
         setProfile({
           login: profileData.login,
@@ -71,7 +71,15 @@ const GitHubStats: React.FC<GitHubStatsProps> = ({
           created_at: profileData.created_at
         });
         
-        setRepos(originalRepos.slice(0, maxRepos).map((repo: any) => ({
+        setRepos(originalRepos.slice(0, maxRepos).map((repo: {
+          name: string;
+          description: string | null;
+          stargazers_count: number;
+          forks_count: number;
+          language: string | null;
+          html_url: string;
+          topics: string[];
+        }) => ({
           name: repo.name,
           description: repo.description || 'No description available',
           stargazers_count: repo.stargazers_count,

@@ -23,7 +23,7 @@ const PinnedRepositories: React.FC<PinnedRepositoriesProps> = ({
 }) => {
   const [repos, setRepos] = useState<Repository[]>([]);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+  const [, setError] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchPinnedRepos = async () => {
@@ -49,7 +49,12 @@ const PinnedRepositories: React.FC<PinnedRepositoriesProps> = ({
         
         const reposData = await reposResponse.json();
         
-        console.log('Raw repos data:', reposData.slice(0, 5).map((repo: any) => ({
+        console.log('Raw repos data:', reposData.slice(0, 5).map((repo: {
+          name: string;
+          stargazers_count: number;
+          fork: boolean;
+          updated_at: string;
+        }) => ({
           name: repo.name,
           stars: repo.stargazers_count,
           fork: repo.fork,
@@ -58,10 +63,19 @@ const PinnedRepositories: React.FC<PinnedRepositoriesProps> = ({
         
         // Filter to get original repos (not forks) and select most recently updated ones
         const originalRepos = reposData
-          .filter((repo: any) => !repo.fork) // Include all original repos regardless of stars
-          .sort((a: any, b: any) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()) // Sort by most recent
+          .filter((repo: { fork: boolean }) => !repo.fork) // Include all original repos regardless of stars
+          .sort((a: { updated_at: string }, b: { updated_at: string }) => new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime()) // Sort by most recent
           .slice(0, maxRepos)
-          .map((repo: any) => ({
+          .map((repo: {
+            name: string;
+            description: string | null;
+            stargazers_count: number;
+            forks_count: number;
+            language: string | null;
+            html_url: string;
+            topics: string[];
+            homepage?: string;
+          }) => ({
             name: repo.name,
             description: repo.description || 'No description available',
             stargazers_count: repo.stargazers_count,

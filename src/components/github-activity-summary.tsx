@@ -37,11 +37,11 @@ const GitHubActivitySummary: React.FC<GitHubActivityProps> = ({
         const reposData = await reposResponse.json();
         
         // Calculate total stars
-        const totalStars = reposData.reduce((sum: number, repo: any) => sum + repo.stargazers_count, 0);
+        const totalStars = reposData.reduce((sum: number, repo: { stargazers_count: number }) => sum + repo.stargazers_count, 0);
         
         // Find most used language
         const languageCount: { [key: string]: number } = {};
-        reposData.forEach((repo: any) => {
+        reposData.forEach((repo: { language: string | null }) => {
           if (repo.language) {
             languageCount[repo.language] = (languageCount[repo.language] || 0) + 1;
           }
@@ -55,7 +55,7 @@ const GitHubActivitySummary: React.FC<GitHubActivityProps> = ({
         const oneYearAgo = new Date();
         oneYearAgo.setFullYear(oneYearAgo.getFullYear() - 1);
         
-        const recentActivity = reposData.filter((repo: any) => {
+        const recentActivity = reposData.filter((repo: { updated_at: string }) => {
           const updatedDate = new Date(repo.updated_at);
           return updatedDate >= oneYearAgo;
         }).length;

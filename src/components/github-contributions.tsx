@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Github, Calendar, GitCommit, Star } from 'lucide-react';
+import { Github } from 'lucide-react';
 
 interface GitHubStats {
   totalContributions: number;
@@ -24,7 +24,6 @@ interface GitHubContributionsProps {
 
 const GitHubContributions: React.FC<GitHubContributionsProps> = ({ 
   username = 'lxyhan', 
-  showStats = true,
   compact = false 
 }) => {
   const [stats, setStats] = useState<GitHubStats | null>(null);
@@ -32,7 +31,7 @@ const GitHubContributions: React.FC<GitHubContributionsProps> = ({
   const [error, setError] = useState<string | null>(null);
 
   // Generate contributions based on repository activity
-  const generateContributionsFromRepos = (repos: any[]): ContributionDay[] => {
+  const generateContributionsFromRepos = (repos: Array<{ created_at: string; updated_at: string }>): ContributionDay[] => {
     const contributions: ContributionDay[] = [];
     const today = new Date();
     const startDate = new Date(today);
@@ -148,47 +147,47 @@ const GitHubContributions: React.FC<GitHubContributionsProps> = ({
     return contributions;
   };
 
-  // Generate mock data for fallback
-  const generateMockContributions = (): ContributionDay[] => {
-    const contributions: ContributionDay[] = [];
-    const today = new Date();
-    const startDate = new Date(today);
-    startDate.setDate(today.getDate() - 365);
+  // Generate mock data for fallback (currently unused)
+  // const generateMockContributions = (): ContributionDay[] => {
+  //   const contributions: ContributionDay[] = [];
+  //   const today = new Date();
+  //   const startDate = new Date(today);
+  //   startDate.setDate(today.getDate() - 365);
 
-    for (let d = new Date(startDate); d <= today; d.setDate(d.getDate() + 1)) {
-      const dayOfWeek = d.getDay();
-      const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
+  //   for (let d = new Date(startDate); d <= today; d.setDate(d.getDate() + 1)) {
+  //     const dayOfWeek = d.getDay();
+  //     const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
       
-      // Simulate realistic contribution patterns
-      let count = 0;
-      const random = Math.random();
+  //     // Simulate realistic contribution patterns
+  //     let count = 0;
+  //     const random = Math.random();
       
-      if (!isWeekend) {
-        if (random > 0.3) count = Math.floor(Math.random() * 8) + 1;
-      } else {
-        if (random > 0.7) count = Math.floor(Math.random() * 4) + 1;
-      }
+  //     if (!isWeekend) {
+  //       if (random > 0.3) count = Math.floor(Math.random() * 8) + 1;
+  //     } else {
+  //       if (random > 0.7) count = Math.floor(Math.random() * 4) + 1;
+  //     }
       
-      // Add some periods of high activity (hackathons, project sprints)
-      const dayOfYear = Math.floor((d.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
-      if (dayOfYear % 90 < 7) { // Sprint weeks
-        count = Math.floor(Math.random() * 15) + 5;
-      }
+  //     // Add some periods of high activity (hackathons, project sprints)
+  //     const dayOfYear = Math.floor((d.getTime() - startDate.getTime()) / (1000 * 60 * 60 * 24));
+  //     if (dayOfYear % 90 < 7) { // Sprint weeks
+  //       count = Math.floor(Math.random() * 15) + 5;
+  //     }
       
-      const level = count === 0 ? 0 : 
-                  count <= 2 ? 1 : 
-                  count <= 5 ? 2 : 
-                  count <= 10 ? 3 : 4;
+  //     const level = count === 0 ? 0 : 
+  //                 count <= 2 ? 1 : 
+  //                 count <= 5 ? 2 : 
+  //                 count <= 10 ? 3 : 4;
 
-      contributions.push({
-        date: d.toISOString().split('T')[0],
-        count,
-        level
-      });
-    }
+  //     contributions.push({
+  //       date: d.toISOString().split('T')[0],
+  //       count,
+  //       level
+  //     });
+  //   }
     
-    return contributions;
-  };
+  //   return contributions;
+  // };
 
   useEffect(() => {
     const fetchGitHubData = async () => {
@@ -229,7 +228,7 @@ const GitHubContributions: React.FC<GitHubContributionsProps> = ({
           username: userData.login,
           publicRepos: userData.public_repos,
           repoCount: reposData.length,
-          recentRepos: reposData.slice(0, 3).map((repo: any) => ({
+          recentRepos: reposData.slice(0, 3).map((repo: { name: string; updated_at: string; stargazers_count: number }) => ({
             name: repo.name,
             updated: repo.updated_at,
             stars: repo.stargazers_count
@@ -237,7 +236,7 @@ const GitHubContributions: React.FC<GitHubContributionsProps> = ({
         });
         
         // Calculate total stars across all repos
-        const totalStars = reposData.reduce((sum: number, repo: any) => sum + repo.stargazers_count, 0);
+        const totalStars = reposData.reduce((sum: number, repo: { stargazers_count: number }) => sum + repo.stargazers_count, 0);
         
         // Generate contributions based on recent repository activity
         // This is an approximation since real contributions require GitHub GraphQL API with auth
@@ -308,7 +307,7 @@ const GitHubContributions: React.FC<GitHubContributionsProps> = ({
       level: 0
     });
     
-    contributions.forEach((day, index) => {
+    contributions.forEach((day) => {
       currentWeek.push(day);
       
       if (currentWeek.length === 7) {

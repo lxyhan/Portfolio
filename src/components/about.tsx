@@ -12,7 +12,7 @@ export default function About() {
         </p>
         
         <div>
-          <h2 className="text-base font-medium text-gray-900 mb-3 tracking-wide">What I've been up to</h2>
+          <h2 className="text-base font-medium text-gray-900 mb-3 tracking-wide">What I&apos;ve been up to</h2>
           <div className="space-y-1.5 text-sm text-gray-600 leading-relaxed">
             <div className="flex items-start gap-2">
               <span className="text-gray-400 font-mono text-xs mt-0.5">{'>'}</span>
