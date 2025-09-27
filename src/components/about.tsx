@@ -69,7 +69,7 @@ export default function About() {
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
-                <span>1st at <a href="https://devpost.com/software/close-to-home" className="text-gray-900 underline decoration-gray-400 underline-offset-2 hover:decoration-gray-600">NewHacks</a></span>
+                <span>Databricks Prize & 1st in Track at <a href="https://devpost.com/software/close-to-home" className="text-gray-900 underline decoration-gray-400 underline-offset-2 hover:decoration-gray-600">NewHacks</a></span>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>

@@ -51,7 +51,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
   const sections = [
     { id: 'about', label: 'About Me' },
     { id: 'projects', label: 'Recent Projects' },
-    { id: 'writing', label: 'Writing (under construction)', disabled: true },
+    { id: 'writing', label: 'Writing (under construction) 🚧', disabled: true },
     { id: 'tech', label: 'Tech Stack' },
     { id: 'gallery', label: 'Camera Roll' },
     { id: 'resume', label: 'Resume / CV' }
