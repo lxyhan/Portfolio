@@ -1,5 +1,4 @@
 import React from 'react';
-import GitHubActivitySummary from './github-activity-summary';
 import ContributionGraph from './contributions';
 
 export default function About() {
