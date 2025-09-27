@@ -2,7 +2,7 @@
 
 ## Quick Intro
 
-Hey! I'm James, studying Computer Science at University of Toronto, training as an amateur triathlete, and working as a SWE at Canada Life.
+Hey! I'm James, studying Computer Science at University of Toronto, training as an amateur triathlete, and working on TD's AI Team.
 
 ## What I've been up to
 
@@ -16,7 +16,7 @@ Recent highlights and achievements:
 - VP at UofT Blueprint, organizing production projects for nonprofits
 - Director of Campus Strategy at UofT AI
 - Anthropic Builder Ambassador
-- Building MarkUs, open source software with Prof. David Liu (used by 3300+ students)
+- Building MarkUs, open source software with Prof. David Liu (used by 20,000+ students annually across UofT and Waterloo)
 - Building PythonTA, open source software with Prof. David Liu
 - Built Next.js app for City of Brampton at Blueprint
 - Completed Ironman 70.3 Muskoka, led UofT Run Club

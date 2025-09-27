@@ -51,7 +51,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
   const sections = [
     { id: 'about', label: 'About Me' },
     { id: 'projects', label: 'Recent Projects' },
-    { id: 'writing', label: 'Writing' },
+    { id: 'writing', label: 'Writing (under construction)', disabled: true },
     { id: 'tech', label: 'Tech Stack' },
     { id: 'gallery', label: 'Camera Roll' },
     { id: 'resume', label: 'Resume / CV' }
@@ -138,11 +138,14 @@ export default function HomeClient({ posts }: HomeClientProps) {
                     </div>
 
                     {/* Bio */}
-                    <p className="text-base text-gray-600 leading-relaxed font-serif">
-                      Building at the intersection of <span className="italic">machine learning</span> and <span className="italic">product design</span>. 
-                      Currently studying computer science and statistics at UofT, with a focus on creating 
-                      thoughtful digital experiences.
-                    </p>
+                    <div className="text-base text-gray-600 leading-relaxed font-serif space-y-3">
+                      <p>
+                        Triathlete, interested in product, machine learning, history, and economics.
+                      </p>
+                      <p>
+                        I love music and meeting new friends! Let's have a chat about your favorite song or book :)
+                      </p>
+                    </div>
                   </div>
 
                   {/* Navigation */}
@@ -152,6 +155,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
                         <div key={section.id}>
                           <button
                             onClick={() => {
+                              if (section.disabled) return;
                               setIsLoading(true);
                               setTimeout(() => {
                                 setActiveSection(section.id);
@@ -159,7 +163,9 @@ export default function HomeClient({ posts }: HomeClientProps) {
                               }, 200);
                             }}
                             className={`text-left text-base font-serif transition-colors ${
-                              activeSection === section.id
+                              section.disabled
+                                ? 'text-gray-400 cursor-not-allowed opacity-50'
+                                : activeSection === section.id
                                 ? 'text-gray-900 font-medium'
                                 : 'text-gray-600 hover:text-gray-900'
                             }`}
