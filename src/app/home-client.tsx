@@ -143,7 +143,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
                         Triathlete, interested in product, machine learning, history, and economics.
                       </p>
                       <p>
-                        I love music and meeting new friends! Let's have a chat about your favorite song or book :)
+                        I love music and meeting new friends! Let&apos;s have a chat about your favorite song or book :)
                       </p>
                     </div>
                   </div>

@@ -15,7 +15,7 @@ export default function About() {
             <div className="space-y-1.5 text-base text-gray-600 leading-relaxed">
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
-                <span>Incoming SWE -> AI Team at TD</span>
+                <span>Incoming SWE → AI Team at TD</span>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
