@@ -10,7 +10,7 @@ export default function MobileNav({ activeSection, onSectionChange, sections }: 
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [photoProgress, setPhotoProgress] = useState(0);
-  const photos = ['/newpfp.jpg', '/newpfp2.jpg', '/newpfp3.jpg'];
+  const photos = ['/Newpfp.JPG', '/Newpfp2.JPG', '/newpfp3.jpg'];
 
   // Auto-switch photo every 10 seconds with progress bar
   React.useEffect(() => {

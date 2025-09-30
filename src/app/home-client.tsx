@@ -26,7 +26,7 @@ export default function HomeClient({ posts }: HomeClientProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
   const [photoProgress, setPhotoProgress] = useState(0);
-  const photos = ['/newpfp.jpg', '/newpfp2.jpg', '/newpfp3.jpg'];
+  const photos = ['/Newpfp.JPG', '/Newpfp2.JPG', '/newpfp3.jpg'];
 
   // Auto-switch photo every 10 seconds with progress bar
   useEffect(() => {
