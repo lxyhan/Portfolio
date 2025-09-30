@@ -6,11 +6,10 @@ export default function About() {
     <div className="font-serif max-w-3xl">
       <h1 className="text-3xl font-medium mb-6 text-gray-900 border-b border-gray-200 pb-2">About</h1>
       <div className="space-y-5">
-        
         <div className="space-y-6">
           {/* Software Work Section */}
           <div>
-            <h2 className="text-lg font-medium text-gray-900 mb-3 tracking-wide">Current Software Work</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-3 tracking-wide">Current Software Work</h2>
             <div className="space-y-1.5 text-base text-gray-600 leading-relaxed">
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
@@ -33,7 +32,7 @@ export default function About() {
 
           {/* Leadership Section */}
           <div>
-            <h2 className="text-lg font-medium text-gray-900 mb-3 tracking-wide">Building Communities</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-3 tracking-wide">Building Communities</h2>
             <div className="space-y-1.5 text-base text-gray-600 leading-relaxed">
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
@@ -56,7 +55,7 @@ export default function About() {
 
           {/* Hackathons Section */}
           <div>
-            <h2 className="text-lg font-medium text-gray-900 mb-3 tracking-wide"><a href="#" className="text-gray-900 underline decoration-gray-400 underline-offset-2 hover:decoration-gray-600">Hackathons and Case Competitions</a></h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-3 tracking-wide"><a href="#" className="text-gray-900 underline decoration-gray-400 underline-offset-2 hover:decoration-gray-600">Hackathons and Case Competitions</a></h2>
             <div className="space-y-1.5 text-base text-gray-600 leading-relaxed">
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
@@ -87,7 +86,7 @@ export default function About() {
 
         {/* Personal Achievements */}
         <div>
-        <h2 className="text-lg font-medium text-gray-900 mb-3 tracking-wide">Triathlon and Strength Training</h2>
+        <h2 className="text-lg font-semibold text-gray-900 mb-3 tracking-wide">Triathlon and Strength Training</h2>
         <div className="space-y-1.5 text-base text-gray-600 leading-relaxed">
             <div className="flex items-start gap-2">
             <span className="text-gray-400 font-mono text-xs mt-0.5">{'>'}</span>

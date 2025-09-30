@@ -24,6 +24,26 @@ export default function HomeClient({ posts }: HomeClientProps) {
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
   const [activeSection, setActiveSection] = useState('about');
   const [isLoading, setIsLoading] = useState(false);
+  const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
+  const [photoProgress, setPhotoProgress] = useState(0);
+  const photos = ['/newpfp.jpg', '/newpfp2.jpg', '/newpfp3.jpg'];
+
+  // Auto-switch photo every 10 seconds with progress bar
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentPhotoIndex(prev => (prev + 1) % 3);
+      setPhotoProgress(0);
+    }, 10000);
+
+    const progressInterval = setInterval(() => {
+      setPhotoProgress(prev => (prev >= 100 ? 0 : prev + 1));
+    }, 100);
+
+    return () => {
+      clearInterval(interval);
+      clearInterval(progressInterval);
+    };
+  }, []);
 
   // Handle URL params on mount and when they change
   useEffect(() => {
@@ -114,36 +134,59 @@ export default function HomeClient({ posts }: HomeClientProps) {
             <div className="flex">
               
               {/* Desktop sidebar */}
-              <div className="w-64 flex-shrink-0">
+              <div className="w-80 flex-shrink-0">
                 <div className="sticky top-8">
-                  {/* Header with photo */}
+                  {/* Header with larger vertical photo */}
                   <div className="mb-8">
-                    <div className="flex gap-3 items-center mb-4">
-                      <div className="w-16 h-16 bg-gray-50 rounded overflow-hidden flex-shrink-0">
-                        <img
-                          src="/profile-photo.jpg"
-                          alt="James Han"
-                          className="object-cover w-full h-full"
-                        />
-                      </div>
-                      
-                      <div className="flex-1 min-w-0">
-                        <h1 className="font-serif text-xl font-medium text-gray-900 leading-tight">
-                          James Han
-                        </h1>
-                        <div className="text-base text-gray-500 leading-tight font-serif">
-                          Compsci & Stats @ UofT
+                    {/* Large Portrait Photo */}
+                    <div 
+                      className="w-full h-[420px] rounded-xl overflow-hidden border border-gray-200 shadow-sm mb-2 cursor-pointer relative"
+                      onClick={() => {
+                        setCurrentPhotoIndex(prev => (prev + 1) % 3);
+                        setPhotoProgress(0);
+                      }}
+                    >
+                      <img
+                        src={photos[currentPhotoIndex]}
+                        alt="James Han"
+                        className="object-cover w-full h-full transition-opacity duration-500 ease-in-out"
+                      />
+                    </div>
+                    {/* 3-Segment Progress Bar */}
+                    <div className="w-full flex gap-1 mb-6">
+                      {[0, 1, 2].map((index) => (
+                        <div key={index} className="flex-1 h-0.5 bg-gray-50 rounded-full overflow-hidden">
+                          <div 
+                            className="h-full bg-gray-300 transition-all duration-100 ease-linear"
+                            style={{ 
+                              width: currentPhotoIndex === index 
+                                ? `${photoProgress}%` 
+                                : currentPhotoIndex > index 
+                                ? '100%' 
+                                : '0%' 
+                            }}
+                          />
                         </div>
+                      ))}
+                    </div>
+
+                    {/* Name and Title */}
+                    <div className="mb-4">
+                      <h1 className="font-serif text-2xl font-medium text-gray-900 leading-tight mb-1">
+                        James Han
+                      </h1>
+                      <div className="text-base text-gray-600 leading-tight font-serif">
+                        Computer Science & Statistics @ UofT
                       </div>
                     </div>
 
                     {/* Bio */}
-                    <div className="text-base text-gray-600 leading-relaxed font-serif space-y-3">
+                    <div className="text-base text-gray-700 leading-relaxed font-serif space-y-3">
                       <p>
                         Triathlete, interested in product, machine learning, history, and economics.
                       </p>
                       <p>
-                        I love music and meeting new friends! Let&apos;s have a chat about your favorite song or book :)
+                        I love music and meeting new friends! Let&apos;s have a chat about your favorite song or book!
                       </p>
                     </div>
                   </div>
