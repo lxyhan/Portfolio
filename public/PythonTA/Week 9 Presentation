@@ -1,0 +1,206 @@
+---
+title: "Implemented Dark Mode Theme Toggle with [data-theme] Attribute Selector"
+---
+
+# Week 8 Presentation SDS: PythonTA Modernization
+---
+
+## 🎯 Overview
+Deep dive into implementing dark mode, typography, and icon improvements for PythonTA's HTML reports.
+
+---
+
+## 🔧 Technical Implementation Details
+
+### 1. **CSS Custom Properties Architecture**
+
+Built a comprehensive theming system using CSS variables:
+
+```css
+:root {
+  --bg-primary: #ffffff;
+  --bg-secondary: #f4f8f8;
+  --text-primary: #000000;
+  --border-color: rgba(0, 0, 0, 0.15);
+  /* ... 18 total variables ... */
+}
+```
+
+**Syntax breakdown**:
+- `:root` - CSS pseudo-class that targets the document root (`<html>`)
+- `--variable-name` - CSS custom properties always start with double dashes
+- These cascade like regular CSS properties but can be referenced anywhere
+
+```css
+[data-theme="dark"] {
+  --bg-primary: #0a0a0a;
+  --bg-secondary: #1a1a1a;
+  /* ... overrides all variables ... */
+}
+```
+
+**How this selector works**:
+- `[data-theme="dark"]` - Attribute selector that matches when `<html data-theme="dark">`
+- Higher specificity than `:root`, so these values override the defaults
+- No need to redeclare unchanged variables
+
+### 2. **Theme Toggle Implementation**
+
+The HTML structure:
+```html
+<button id="theme-toggle" class="theme-toggle" aria-label="Toggle theme">
+  <svg class="sun-icon" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path>
+  </svg>
+  <svg class="moon-icon">...</svg>
+</button>
+```
+
+**SVG attributes explained**:
+- `fill="none"` - Makes the icon outline-only
+- `stroke="currentColor"` - Inherits the text color (adapts to theme!)
+- `viewBox="0 0 24 24"` - Defines the SVG coordinate system
+- `stroke-linecap="round"` - Rounded line endings for smoother appearance
+
+The CSS that controls icon visibility:
+```css
+.theme-toggle .sun-icon,
+.theme-toggle .moon-icon {
+  display: none;  /* Hide both by default */
+}
+
+:root .theme-toggle .sun-icon {
+  display: block;  /* Show sun in light mode */
+}
+
+[data-theme="dark"] .theme-toggle .moon-icon {
+  display: block;  /* Show moon in dark mode */
+}
+```
+
+**Selector specificity trick**: `:root` ensures the sun icon shows by default, while `[data-theme="dark"]` has higher specificity to override it.
+
+### 3. **VS Code Syntax Highlighting Port**
+
+The Pygments-to-VS Code color mapping:
+```css
+/* Light mode (original Pygments) */
+.pygments-k { 
+  color: #aa22ff;    /* Purple keywords */
+  font-weight: bold; 
+}
+
+/* Dark mode (VS Code Dark+) */
+[data-theme="dark"] .pygments-k { 
+  color: #569cd6;    /* VS Code's signature blue */
+  /* Note: removed font-weight for VS Code authenticity */
+}
+```
+
+**Complete mapping example**:
+```css
+[data-theme="dark"] .pygments-c { color: #6A9955; }   /* Comments → green */
+[data-theme="dark"] .pygments-s { color: #ce9178; }   /* Strings → orange */
+[data-theme="dark"] .pygments-m { color: #b5cea8; }   /* Numbers → light green */
+[data-theme="dark"] .pygments-nf { color: #dcdcaa; }  /* Functions → yellow */
+```
+
+---
+
+## 💡 Technical Challenges Solved
+
+### The CSS Variable Scoping Issue
+
+**The bug**:
+```css
+.occurrences,
+.shown {
+  line-height: 35px;
+  padding-left: 20px;
+  /* Bug: no color specified, inherited parent color */
+}
+```
+
+**Why it failed**: In dark mode, these elements were inside a light-background container, inheriting black text on dark background.
+
+**The fix**:
+```css
+.occurrences,
+.shown {
+  line-height: 35px;
+  padding-left: 20px;
+  color: var(--text-secondary);  /* Explicit color variable */
+}
+```
+
+### Understanding `var()` Function Syntax
+
+```css
+/* Basic usage */
+background: var(--bg-primary);
+
+/* With fallback */
+background: var(--bg-primary, #ffffff);
+/*          ^^^^^^^^^^^^^^^^^  ^^^^^^^^
+            variable name     fallback value */
+
+/* Computed example from our code */
+.highlight-pyta {
+  background: var(--highlight-bg) !important;
+  /* Light mode: rgba(228, 255, 0, 0.4) */
+  /* Dark mode:  rgba(255, 220, 0, 0.6) */
+}
+```
+
+### Icon Transformation Removal
+
+**Original SVG with transforms**:
+```xml
+<svg width="10" height="10">
+  <g transform="scale(0.10 0.10)">
+    <path d="M 10 30 l 40 40 l 40 -40" stroke="black" stroke-width="15px"/>
+  </g>
+</svg>
+```
+
+**Breakdown of the path**:
+- `M 10 30` - Move to point (10, 30)
+- `l 40 40` - Line relative: right 40, down 40
+- `l 40 -40` - Line relative: right 40, up 40
+- Creates a ">" chevron shape
+
+**Simplified HeroIcon approach**:
+```xml
+<svg viewBox="0 0 24 24" width="30" height="30">
+  <path d="M19 9l-7 7-7-7"/>
+</svg>
+```
+
+**Why simpler is better**:
+- `viewBox` handles scaling (no transform needed)
+- Cleaner coordinates in standard 24x24 grid
+- `currentColor` inherits from parent (theme-aware)
+
+---
+
+## 🛠️ JavaScript Integration
+
+The existing theme system I hooked into:
+```javascript
+function initializeTheme() {
+  const savedTheme = localStorage.getItem('pyta-theme');
+  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+  const theme = savedTheme || (prefersDark ? 'dark' : 'light');
+  
+  document.documentElement.setAttribute('data-theme', theme);
+}
+```
+
+**Syntax explained**:
+- `localStorage.getItem()` - Retrieves saved preference (persists across sessions)
+- `window.matchMedia()` - CSS media query in JavaScript
+- `'(prefers-color-scheme: dark)'` - System preference media query
+- `.matches` - Boolean: true if query matches
+- `||` operator - JavaScript's logical OR for fallback chain
+- `setAttribute('data-theme', theme)` - Sets `<html data-theme="light|dark">`
+

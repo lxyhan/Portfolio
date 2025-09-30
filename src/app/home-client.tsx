@@ -11,17 +11,22 @@ import About from '../components/about';
 import Resume from '../components/resume';
 import MobileNav from '../components/mobile-nav';
 import { BlogPostDisplay, MobileBlogOverlay } from '../components/blog-post-display';
+import WorkUpdates from '../components/work-updates';
+import { WorkUpdateDisplay, MobileWorkUpdateOverlay } from '../components/work-update-display';
 import type { BlogPost } from '@/types/blog';
+import type { WorkUpdate } from '@/types/work-update';
 import Gallery from '../components/gallery';
 
 interface HomeClientProps {
   posts: BlogPost[];
+  workUpdates: WorkUpdate[];
 }
 
-export default function HomeClient({ posts }: HomeClientProps) {
+export default function HomeClient({ posts, workUpdates }: HomeClientProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [selectedPost, setSelectedPost] = useState<BlogPost | null>(null);
+  const [selectedWorkUpdate, setSelectedWorkUpdate] = useState<WorkUpdate | null>(null);
   const [activeSection, setActiveSection] = useState('about');
   const [isLoading, setIsLoading] = useState(false);
   const [currentPhotoIndex, setCurrentPhotoIndex] = useState(0);
@@ -51,15 +56,26 @@ export default function HomeClient({ posts }: HomeClientProps) {
   // Handle URL params on mount and when they change
   useEffect(() => {
     const postSlug = searchParams.get('post');
+    const workUpdateSlug = searchParams.get('update');
+    const workUpdateProject = searchParams.get('project') as 'MarkUs' | 'PythonTA' | null;
+    
     if (postSlug && posts.length > 0) {
       const post = posts.find(p => p.slug === postSlug);
       if (post) {
         setSelectedPost(post);
+        setSelectedWorkUpdate(null);
+      }
+    } else if (workUpdateSlug && workUpdateProject && workUpdates.length > 0) {
+      const update = workUpdates.find(u => u.slug === workUpdateSlug && u.project === workUpdateProject);
+      if (update) {
+        setSelectedWorkUpdate(update);
+        setSelectedPost(null);
       }
     } else {
       setSelectedPost(null);
+      setSelectedWorkUpdate(null);
     }
-  }, [searchParams, posts]);
+  }, [searchParams, posts, workUpdates]);
 
   const handlePostSelect = (post: BlogPost) => {
     setSelectedPost(post);
@@ -71,9 +87,20 @@ export default function HomeClient({ posts }: HomeClientProps) {
     router.push('/', { scroll: false });
   };
 
+  const handleWorkUpdateSelect = (update: WorkUpdate) => {
+    setSelectedWorkUpdate(update);
+    router.push(`/?update=${update.slug}&project=${update.project}`, { scroll: false });
+  };
+
+  const handleWorkUpdateClose = () => {
+    setSelectedWorkUpdate(null);
+    router.push('/', { scroll: false });
+  };
+
   const sections = [
-    { id: 'about', label: 'About Me' },
+    { id: 'about', label: 'About James' },
     { id: 'projects', label: 'Recent Projects' },
+    { id: 'work-updates', label: 'Open-Source SWE with Prof. David Liu' },
     { id: 'writing', label: 'Writing (under construction) 🚧', disabled: true },
     { id: 'tech', label: 'Tech Stack' },
     { id: 'gallery', label: 'Camera Roll' },
@@ -85,11 +112,17 @@ export default function HomeClient({ posts }: HomeClientProps) {
       return <BlogPostDisplay post={selectedPost} onClose={handlePostClose} />;
     }
 
+    if (selectedWorkUpdate) {
+      return <WorkUpdateDisplay update={selectedWorkUpdate} onClose={handleWorkUpdateClose} />;
+    }
+
     switch (activeSection) {
       case 'about':
         return <About />;
       case 'projects':
         return <Projects />;
+      case 'work-updates':
+        return <WorkUpdates updates={workUpdates} onUpdateClick={handleWorkUpdateSelect} />;
       case 'writing':
         return <Blog posts={posts} selectedPost={selectedPost} onPostClick={handlePostSelect} />;
       case 'tech':
@@ -149,11 +182,16 @@ export default function HomeClient({ posts }: HomeClientProps) {
                         setPhotoProgress(0);
                       }}
                     >
-                      <img
-                        src={photos[currentPhotoIndex]}
-                        alt="James Han"
-                        className="object-cover w-full h-full transition-opacity duration-500 ease-in-out"
-                      />
+                      {photos.map((photo, index) => (
+                        <img
+                          key={photo}
+                          src={photo}
+                          alt="James Han"
+                          className={`absolute inset-0 object-cover w-full h-full transition-opacity duration-700 ease-in-out ${
+                            index === currentPhotoIndex ? 'opacity-100' : 'opacity-0'
+                          }`}
+                        />
+                      ))}
                     </div>
                     {/* 3-Segment Progress Bar */}
                     <div className="w-full flex gap-1 mb-6">
@@ -186,11 +224,9 @@ export default function HomeClient({ posts }: HomeClientProps) {
                     {/* Bio */}
                     <div className="text-base text-gray-700 leading-relaxed font-serif space-y-3">
                       <p>
-                        Triathlete, interested in product, machine learning, history, and economics.
+                        Triathlete, interested in product, machine learning, history, and foreign policy. I like learning new languages, rock climbing, cats, and my favourite bands are Luna (Dean Wareham), Belle and Sebastian, and The Velvet Underground.
                       </p>
-                      <p>
-                        I love music and meeting new friends! Let&apos;s have a chat about your favorite song or book!
-                      </p>
+
                     </div>
                   </div>
 
@@ -321,6 +357,13 @@ export default function HomeClient({ posts }: HomeClientProps) {
         {selectedPost && (
           <div className="lg:hidden">
             <MobileBlogOverlay post={selectedPost} onClose={handlePostClose} />
+          </div>
+        )}
+
+        {/* Mobile Work Update Overlay */}
+        {selectedWorkUpdate && (
+          <div className="lg:hidden">
+            <MobileWorkUpdateOverlay update={selectedWorkUpdate} onClose={handleWorkUpdateClose} />
           </div>
         )}
       </main>

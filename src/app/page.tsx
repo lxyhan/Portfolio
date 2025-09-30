@@ -1,6 +1,7 @@
 // src/app/page.tsx
 import { Suspense } from 'react';
 import { getAllPosts, getPostBySlug } from '@/lib/markdown';
+import { getAllWorkUpdates, getWorkUpdateBySlug } from '@/lib/work-updates';
 import HomeClient from './home-client';
 
 async function HomePage() {
@@ -15,7 +16,18 @@ async function HomePage() {
     })
   );
   
-  return <HomeClient posts={postsWithContent} />;
+  // Fetch all work updates
+  const workUpdates = getAllWorkUpdates();
+  
+  // Pre-fetch the content for all work updates
+  const workUpdatesWithContent = await Promise.all(
+    workUpdates.map(async (update) => {
+      const fullUpdate = await getWorkUpdateBySlug(update.slug, update.project);
+      return fullUpdate!;
+    })
+  );
+  
+  return <HomeClient posts={postsWithContent} workUpdates={workUpdatesWithContent} />;
 }
 
 // Wrap in Suspense to handle useSearchParams

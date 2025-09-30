@@ -4,7 +4,7 @@ import ContributionGraph from './contributions';
 export default function About() {
   return (
     <div className="font-serif max-w-3xl">
-      <h1 className="text-3xl font-medium mb-6 text-gray-900 border-b border-gray-200 pb-2">About</h1>
+      <h1 className="text-3xl font-medium mb-6 text-gray-900 border-b border-gray-200 pb-2">About James</h1>
       <div className="space-y-5">
         <div className="space-y-6">
           {/* Software Work Section */}
