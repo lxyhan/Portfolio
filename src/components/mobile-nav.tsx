@@ -20,7 +20,10 @@ export default function MobileNav({ activeSection, onSectionChange, sections }: 
     }, 10000);
 
     const progressInterval = setInterval(() => {
-      setPhotoProgress(prev => (prev >= 100 ? 0 : prev + 1));
+      setPhotoProgress(prev => {
+        if (prev >= 100) return 100;
+        return prev + 1;
+      });
     }, 100);
 
     return () => {
