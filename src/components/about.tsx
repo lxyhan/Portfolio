@@ -17,7 +17,7 @@ export default function About() {
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
-                <span>SWE at Canada Life</span>
+                <span>SWE and Data at Canada Life</span>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
