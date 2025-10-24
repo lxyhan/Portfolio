@@ -2,7 +2,7 @@
 
 ## Quick Intro
 
-Hey! I'm James, studying Computer Science at University of Toronto, training as an amateur triathlete, and working on TD's AI Team.
+Hey! I'm James, studying Computer Science, Statistics, and Economics at University of Toronto, working on Privacy Engineering at Firefox, and incoming Quantitative Trading at RBC Capital Markets.
 
 ## What I've been up to
 

@@ -13,7 +13,11 @@ export default function About() {
             <div className="space-y-1.5 text-base text-gray-600 leading-relaxed">
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
-                <span>Incoming SWE at RBC Capital Markets (US Cash Management Team, building a Greenfield Platform)</span>
+                <span>Privacy Engineering at <a href="https://www.mozilla.org/firefox/" className="text-gray-900 underline decoration-gray-400 underline-offset-2 hover:decoration-gray-600">Firefox</a></span>
+              </div>
+              <div className="flex items-start gap-2">
+                <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>
+                <span>Incoming Quantitative Trading at RBC Capital Markets</span>
               </div>
               <div className="flex items-start gap-2">
                 <span className="text-gray-400 font-mono text-sm mt-0.5">{'>'}</span>

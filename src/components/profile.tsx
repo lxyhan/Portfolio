@@ -65,7 +65,7 @@ const PersonalHeader = () => {
               James Han
             </h1>
             <div className="text-sm text-gray-500 leading-tight font-serif">
-              Compsci & Stats @ UofT
+              CS, Stats, Econ @ UofT | Privacy Engineering @ Firefox
             </div>
             <div className="text-xs text-gray-400 leading-tight font-serif">
               jameshan.cs@gmail.com
@@ -78,9 +78,9 @@ const PersonalHeader = () => {
 
         {/* Bio - elegant and understated */}
         <p className="text-sm text-gray-600 leading-relaxed font-serif">
-          Building at the intersection of <span className="italic">machine learning</span> and <span className="italic">product design</span>. 
-          Currently studying computer science and statistics at UofT, with a focus on creating 
-          thoughtful digital experiences. Outside of code: long miles, good books, and Galaxie 500.
+          Building at the intersection of <span className="italic">privacy engineering</span>, <span className="italic">machine learning</span>, and <span className="italic">quantitative finance</span>. 
+          Currently studying computer science, statistics, and economics at UofT. Incoming Quantitative Trading @ RBC Capital Markets. 
+          Outside of code: long miles, good books, and Galaxie 500.
         </p>
 
         {/* Social links with selective labels */}
